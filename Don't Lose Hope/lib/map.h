@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <fstream>
+//#include <fstream.h>
 #include <string.h>
 
 
@@ -13,11 +13,11 @@ public:
 	~Map();
 
 	void renderMap();
-	void saveMap(string saveName);
-	void loadMap(string saveName);
+	void saveMap(std::string saveName);
+	void loadMap(std::string saveName);
 
 private:
-	fstream saveFile;
+	//fstream saveFile;
 };
 
 #endif

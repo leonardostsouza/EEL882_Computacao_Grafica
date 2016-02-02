@@ -1,6 +1,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <string.h>
+
+#include "lib/map.h"
 #include <stdio.h>
 
 #define DEFAULT_WINDOW_WIDTH 640
@@ -12,14 +13,14 @@ int main(int argc, char *argv[])
 {
     // useful variables and objects
     sf::VideoMode vmode;
-    bool fullscreen = true;
+    bool fullscreen = false;
 
     // check for execution flags
     for (int iterator = 1; iterator < argc; iterator++)
     {
-        if (strcmp(argv[1],"-w") == 0)
+        if (strcmp(argv[1],"-f") == 0)
         {
-            fullscreen = false;
+            fullscreen = true;
             #ifdef DEBUG
                 printf("DEBUG === fullscreen set to %d\n", fullscreen);
             #endif
