@@ -8,14 +8,15 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <string>
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 class Screen
 {
 public:
-	Screen(bool fullscreen = false);
+	Screen(bool fs = false);
 	~Screen();
 	void play();
 
@@ -23,9 +24,11 @@ protected:
 	void createBackground();
 	void createMenu();
 	void createMusic();
+	bool isFullscreen();
+	void setFullscreen(bool fs);
 
 private:
-	bool fullscreen;
+	static bool fullscreen;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
 	sf::Sprite background;

@@ -1,8 +1,9 @@
 #include "lib/Screen.h"
 
-Screen::Screen(bool fullscreen)
+Screen::Screen(bool fs)
 {
 	//set VideoMode
+	setFullscren(fs);
 	if (!fullscreen)
 	{
 		vmode.width = DEFAULT_WINDOW_WIDTH;
@@ -62,6 +63,9 @@ void Screen::play() {
 }
 
 void Screen::createBackground() {
+	string fileName;
+
+
 	if (!texture.loadFromFile("resources/images/menu_background.png")) {
 		cerr << "Error loading background" << endl;
 	}
@@ -114,4 +118,14 @@ void Screen::createMusic() {
 		sound.setVolume(70);
 		sound.play();
 	}
+}
+
+bool isFullscreen()
+{
+	return fullscreen;
+}
+
+void setFullscreen(bool fs)
+{
+	fullscreen = fs;
 }
