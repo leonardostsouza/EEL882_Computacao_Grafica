@@ -36,10 +36,8 @@ Screen::~Screen()
 }
 
 void Screen::play() {
-	
 	while ((*window).isOpen())
 	{
-
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
 		while ((*window).pollEvent(event))
@@ -51,14 +49,55 @@ void Screen::play() {
 
 		(*window).clear();
 		(*window).draw(background);
-		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); ++op) {
+
+
+		//check mouse position on main screen
+		sf::Vector2i mousePos=sf::Mouse::getPosition(*window);
+		// Highlight menu options
+		sf::RectangleShape highlight;
+		highlight.setSize(sf::Vector2f((vmode.width / 3), (vmode.height / 12)));
+		highlight.setFillColor(sf::Color(0, 102, 204, 120));
+		if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
+		{
+			// NEW GAME
+			if ((mousePos.y >= ((float)((vmode.height / 3) + (vmode.height / 12))))
+				&& (mousePos.y <= ((float)((vmode.height / 3) + (2*vmode.height / 12)))))
+			{
+				highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
+				window->draw(highlight);
+			}
+			
+			// CONTINUE
+			if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
+				&& (mousePos.y <= ((float)((vmode.height / 3) + (3*vmode.height / 12)))))
+			{
+				highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
+				window->draw(highlight);
+			}
+
+			// OPTIONS
+			if ((mousePos.y >= ((float)((vmode.height / 3) + (3*vmode.height / 12))))
+				&& (mousePos.y <= ((float)((vmode.height / 3) + (4*vmode.height / 12)))))
+			{
+				highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (3*vmode.height / 12) + (vmode.height / 64)));
+				window->draw(highlight);
+			}
+
+			// EXIT
+			if ((mousePos.y >= ((float)((vmode.height / 3) + (4*vmode.height / 12))))
+				&& (mousePos.y <= ((float)((vmode.height / 3) + (5*vmode.height / 12)))))
+			{
+				highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (4*vmode.height / 12) + (vmode.height / 64)));
+				window->draw(highlight);
+			}
+		}
+
+
+		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
 			(*window).draw(*op);
 		}
 		(*window).display();
-
 	}
-
-
 }
 
 void Screen::createBackground() {
@@ -92,22 +131,22 @@ void Screen::createMenu() {
 	else {
 		menu[0].setCharacterSize(vmode.height / 12);
 		menu[0].setString("New Game");
-		menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.width / 16)) });
+		menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.height / 12)) });
 		menu[0].setFont(font);
 		menu[0].setColor(sf::Color(0, 0, 0));
 		menu[1].setCharacterSize(vmode.height / 12);
 		menu[1].setString("Continue");
-		menu[1].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 2*(vmode.width / 16)) });
+		menu[1].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 2*(vmode.height / 12)) });
 		menu[1].setFont(font);
 		menu[1].setColor(sf::Color(0, 0, 0));
 		menu[2].setCharacterSize(vmode.height / 12);
 		menu[2].setString("Options");
-		menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.width / 16)) });
+		menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.height / 12)) });
 		menu[2].setFont(font);
 		menu[2].setColor(sf::Color(0, 0, 0));
 		menu[3].setCharacterSize(vmode.height / 12);
 		menu[3].setString("Exit");
-		menu[3].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 4*(vmode.width / 16)) });
+		menu[3].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 4*(vmode.height / 12)) });
 		menu[3].setFont(font);
 		menu[3].setColor(sf::Color(0, 0, 0));
 	}
