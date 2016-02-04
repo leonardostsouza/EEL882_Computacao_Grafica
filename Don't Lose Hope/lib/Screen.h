@@ -28,7 +28,7 @@ protected:
 	void setFullscreen(bool fs);
 
 private:
-	static bool fullscreen;
+	bool fullscreen;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
 	sf::Sprite background;

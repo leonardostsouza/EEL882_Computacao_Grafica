@@ -3,8 +3,8 @@
 Screen::Screen(bool fs)
 {
 	//set VideoMode
-	setFullscren(fs);
-	if (!fullscreen)
+	this->setFullscreen(fs);
+	if (!isFullscreen())
 	{
 		vmode.width = DEFAULT_WINDOW_WIDTH;
 		vmode.height = DEFAULT_WINDOW_HEIGHT;
@@ -63,11 +63,18 @@ void Screen::play() {
 }
 
 void Screen::createBackground() {
-	string fileName;
+	std::string fileName;
+	if (this->isFullscreen())
+	{
+		fileName = "resources/images/menu_background_fullscreen.png";
+	}
+	else
+	{
+		fileName = "resources/images/menu_background_window.png";
+	}
 
-
-	if (!texture.loadFromFile("resources/images/menu_background.png")) {
-		cerr << "Error loading background" << endl;
+	if (!texture.loadFromFile(fileName)) {
+		std::cerr << "Error loading background" << std::endl;
 	}
 	else {
 		texture.setSmooth(true);
@@ -81,7 +88,7 @@ void Screen :: createMenu() {
 	menu.resize(4);
 
 	if (!font.loadFromFile("resources/fonts/default_font.ttf")) {
-		cerr << "Error loading fonts" << endl;
+		std::cerr << "Error loading fonts" << std::endl;
 	}
 	else {
 		menu[0].setCharacterSize(40);
@@ -110,7 +117,7 @@ void Screen :: createMenu() {
 void Screen::createMusic() {
 
 	if (!buffer.loadFromFile("resources/sounds/main_menu.wav")){
-		cerr << "Error loading sound" << endl;
+		std::cerr << "Error loading sound" << std::endl;
 	}
 	else {
 		sound.setBuffer(buffer);
@@ -120,12 +127,12 @@ void Screen::createMusic() {
 	}
 }
 
-bool isFullscreen()
+bool Screen::isFullscreen()
 {
-	return fullscreen;
+	return this->fullscreen;
 }
 
-void setFullscreen(bool fs)
+void Screen::setFullscreen(bool fs)
 {
-	fullscreen = fs;
+	this->fullscreen = fs;
 }
