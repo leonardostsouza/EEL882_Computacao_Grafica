@@ -1,9 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
-//#include <fstream.h>
-#include <string.h>
+#include <fstream>
+#include <string>
 
+using namespace std;
 
 class Map
 {
@@ -13,11 +14,11 @@ public:
 	~Map();
 
 	void renderMap();
-	void saveMap(std::string saveName);
-	void loadMap(std::string saveName);
+	void saveMap(string saveName);
+	void loadMap(string saveName);
 
 private:
-	//fstream saveFile;
+	fstream saveFile;
 };
 
 #endif

@@ -6,13 +6,13 @@
 class Player
 {
 public:
-	Player(){
+	Player() {
 		current_lifes = PLAYER_MAX_LIFES;
 	}
 	~Player();
 
-	void setLifes(unsigned int lifeQtt){current_lifes = lifeQtt;}
-	unsigned int getLifes(){return current_lifes;}
+	void setLifes(unsigned int lifeQtt) { current_lifes = lifeQtt; }
+	unsigned int getLifes() { return current_lifes; }
 
 private:
 	unsigned int current_lifes;
