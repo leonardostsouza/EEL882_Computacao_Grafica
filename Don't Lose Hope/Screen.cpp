@@ -51,10 +51,9 @@ void Screen::play() {
 
 		(*window).clear();
 		(*window).draw(background);
-		// O compilador tava reclamando desse for. op tem que ser do tipo drawable, não text
-		/*for (vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); ++op) {
-			(*window).draw(op);
-		}*/
+		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); ++op) {
+			(*window).draw(*op);
+		}
 		(*window).display();
 
 	}
@@ -83,7 +82,7 @@ void Screen::createBackground() {
 	}
 }
 
-void Screen :: createMenu() {
+void Screen::createMenu() {
 	//set menu size
 	menu.resize(4);
 
@@ -91,24 +90,24 @@ void Screen :: createMenu() {
 		std::cerr << "Error loading fonts" << std::endl;
 	}
 	else {
-		menu[0].setCharacterSize(40);
+		menu[0].setCharacterSize(vmode.height / 12);
 		menu[0].setString("New Game");
-		menu[0].setPosition({ (float)((vmode.width / 3) + 20),(float)(vmode.height / 3 + 30) });
+		menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.width / 16)) });
 		menu[0].setFont(font);
 		menu[0].setColor(sf::Color(0, 0, 0));
-		menu[1].setCharacterSize(40);
+		menu[1].setCharacterSize(vmode.height / 12);
 		menu[1].setString("Continue");
-		menu[1].setPosition({ (float)((vmode.width / 3) + 20),(float)(vmode.height / 3 + 80) });
+		menu[1].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 2*(vmode.width / 16)) });
 		menu[1].setFont(font);
 		menu[1].setColor(sf::Color(0, 0, 0));
-		menu[2].setCharacterSize(40);
+		menu[2].setCharacterSize(vmode.height / 12);
 		menu[2].setString("Options");
-		menu[2].setPosition({ (float)((vmode.width / 3) + 20),(float)(vmode.height / 3 + 130) });
+		menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.width / 16)) });
 		menu[2].setFont(font);
 		menu[2].setColor(sf::Color(0, 0, 0));
-		menu[3].setCharacterSize(40);
+		menu[3].setCharacterSize(vmode.height / 12);
 		menu[3].setString("Exit");
-		menu[3].setPosition({ (float)((vmode.width / 3) + 20),(float)(vmode.height / 3 + 180) });
+		menu[3].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 4*(vmode.width / 16)) });
 		menu[3].setFont(font);
 		menu[3].setColor(sf::Color(0, 0, 0));
 	}
