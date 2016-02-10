@@ -3,11 +3,11 @@
 //#include "lib/utilities.h"
 #include <string.h>
 
-//using namespace std;
+using namespace std;
 
 int main(int argc, char *argv[])
 {
-    GAMESTATE state = MAINMENU;
+    GAMESTATE state = MAINMENU, prevState = state;
 	bool fs = false;
     // check for execution flags
     #ifdef DEBUG
@@ -50,41 +50,32 @@ int main(int argc, char *argv[])
         sf::Event event;
         while ((*window).pollEvent(event))
         {
+
             switch (state){
                 case MAINMENU:
                     state = screen.eventHandler(state);
-                    #ifdef DEBUG
-                    std::cout << "DEBUG === GAMESTATE = \"Main Menu\" " << fs << std::endl;
-                    #endif
                     break;
 
                 case OPTIONSMENU:
                     state = screen.eventHandler(state);
-                    #ifdef DEBUG
-                    std::cout << "DEBUG === GAMESTATE = \"Options Menu\" " << fs << std::endl;
-                    #endif
                     break;
 
                 case PLAYING:
                     state = game.eventHandler(state);
-                    #ifdef DEBUG
-                    std::cout << "DEBUG === GAMESTATE = \"Playing\" " << fs << std::endl;
-                    #endif
                     break;                
 
                 case CLOSE:
-                    #ifdef DEBUG
-                    std::cout << "DEBUG === GAMESTATE = \"Quit\" " << fs << std::endl;
-                    #endif
                     (*window).close();
                     break;
 
                 default:
                     state = MAINMENU;
             }
+
+            prevState = state;
             // close window event
-            if (event.type == sf::Event::Closed)
-                (*window).close();
+            //if (event.type == sf::Event::Closed)
+            //    (*window).close();
         }
     }
 

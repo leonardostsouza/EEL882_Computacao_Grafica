@@ -54,10 +54,12 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 		highlight.setSize(sf::Vector2f((vmode.width / 3), (vmode.height / 12)));
 		highlight.setFillColor(sf::Color(0, 102, 204, 60));
 
-		if (localstate == MAINMENU){
+		// MAIN MENU SCREEN
+		if (localstate == MAINMENU)
+		{
 			nextState = MAINMENU;
-			// Highlight menu options
-			
+
+			// Menu Options mousover and clicking Handling		
 			if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
 			{
 				// NEW GAME
@@ -71,6 +73,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 					{
 						nextState = PLAYING;
+						#ifdef DEBUG	                  
+	                    std::cout << "DEBUG === GAMESTATE = \"PLAYING\"" << std::endl;            
+	                    #endif  
 					}
 				}			
 				// CONTINUE
@@ -92,6 +97,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 					{
 						nextState = OPTIONSMENU;
+						#ifdef DEBUG	                  
+	                    std::cout << "DEBUG === GAMESTATE = \"OPTIONSMENU\"" << std::endl;                   
+	                    #endif      
 					}
 				}
 				// EXIT
@@ -103,8 +111,13 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					window->draw(highlight);
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						nextState = CLOSE;
+						#ifdef DEBUG	                  
+	                    std::cout << "DEBUG === GAMESTATE = \"CLOSE\"" << std::endl;            
+	                    #endif 
 					}
-				}else{
+				}
+				else
+				{
 					changeMenuColor(-1);
 				}
 			}else{
@@ -113,7 +126,10 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 
 			///Add a mouseclick handler. Whenever he changes the screen, changes the state to the desired one :D
 		
-		}else{
+		}
+		//OPTIONS MENU SCREEN
+		else
+		{
 			nextState = OPTIONSMENU;
 			if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
 			{
@@ -124,12 +140,25 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					changeMenuColor(0);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
+
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-						std::cout << sound.getStatus() << std::endl;
-						if (sound.getStatus() == sf::Sound::Playing){
-							sound.stop();
-						}else{
-							sound.play();
+
+						//std::cout << sound.getStatus() << std::endl;
+						if (sound.getStatus() == sf::Sound::Playing)
+						{							
+							this->sound.stop();
+
+							#ifdef DEBUG
+							std::cout << "DEBUG === SOUND OFF " << std::endl;
+                    		#endif
+						}
+						else
+						{
+							this->sound.play();
+
+							#ifdef DEBUG
+							std::cout << "DEBUG === SOUND ON " << std::endl;
+                    		#endif
 						}
 					}
 				}
@@ -143,6 +172,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					window->draw(highlight);
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						nextState = MAINMENU;
+						#ifdef DEBUG	                  
+	                    std::cout << "DEBUG === GAMESTATE = \"MAINMENU\"" << std::endl;            
+	                    #endif 
 					}
 				}
 			}			
