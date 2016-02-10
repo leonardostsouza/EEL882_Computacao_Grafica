@@ -1,9 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-#ifndef DEFAULT_WINDOW_WIDTH
-#define DEFAULT_WINDOW_WIDTH 640
-#ifndef DEFAULT_WINDOW_HEIGHT
-#define DEFAULT_WINDOW_HEIGHT 480
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -12,8 +8,6 @@
 #include <iostream>
 #include <stdio.h>
 #include "utilities.h"
-
-//using namespace std;
 
 class Game
 {
@@ -41,6 +35,4 @@ private:
 	std::vector<sf::Text> menu;
 };
 
-#endif
-#endif
 #endif

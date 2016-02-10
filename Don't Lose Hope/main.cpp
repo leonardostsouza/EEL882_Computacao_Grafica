@@ -1,6 +1,6 @@
 #include "lib/screen.h"
-#include "lib/utilities.h"
 #include "lib/game.h"
+//#include "lib/utilities.h"
 #include <string.h>
 
 //using namespace std;
@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 
     sf::VideoMode vmode;
     sf::RenderWindow* window;
-    //set VideoMode
 
+    //set VideoMode
     if (!fs)
     {
         vmode.width = DEFAULT_WINDOW_WIDTH;
@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
 
     // Create the main window
     window = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
-
 	Screen screen(fs,window,vmode);
     Game game(fs,window,vmode);
 

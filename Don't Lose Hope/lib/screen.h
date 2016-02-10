@@ -1,9 +1,5 @@
 #ifndef SCREEN_H
 #define SCREEN_H
-#ifndef DEFAULT_WINDOW_WIDTH
-#define DEFAULT_WINDOW_WIDTH 640
-#ifndef DEFAULT_WINDOW_HEIGHT
-#define DEFAULT_WINDOW_HEIGHT 480
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -44,6 +40,4 @@ private:
 	std::vector<sf::Text> menu;
 };
 
-#endif
-#endif
 #endif
