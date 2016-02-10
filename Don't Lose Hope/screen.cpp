@@ -30,7 +30,7 @@ void Screen::changeMenuColor(int op){
 	}
 }
 
-GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
+GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 	/*while ((*window).isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
@@ -141,24 +141,26 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
 
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					if (event.type == sf::Event::MouseButtonPressed)
+					{
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 
-						//std::cout << sound.getStatus() << std::endl;
-						if (backgroundMusic.getStatus() == sf::SoundSource::Status::Playing)
-						{							
-							backgroundMusic.stop();
+							if (bgMusic.getStatus() == sf::SoundSource::Status::Playing)
+							{							
+								bgMusic.stop();
 
-							#ifdef DEBUG
-							std::cout << "DEBUG === SOUND OFF " << std::endl;
-                    		#endif
-						}
-						else
-						{
-							backgroundMusic.play();
+								#ifdef DEBUG
+								std::cout << "DEBUG === SOUND OFF " << std::endl;
+	                    		#endif
+							}
+							else
+							{
+								bgMusic.play();
 
-							#ifdef DEBUG
-							std::cout << "DEBUG === SOUND ON " << std::endl;
-                    		#endif
+								#ifdef DEBUG
+								std::cout << "DEBUG === SOUND ON " << std::endl;
+	                    		#endif
+							}
 						}
 					}
 				}
@@ -247,7 +249,7 @@ void Screen::createMenu(GAMESTATE which) {
 		menu.clear();
 		menu.resize(2);	
 		menu[0].setCharacterSize(vmode.height / 12);
-		if (backgroundMusic.getStatus() == sf::SoundSource::Status::Playing)
+		if (bgMusic.getStatus() == sf::SoundSource::Status::Playing)
 		{
 			menu[0].setString("Sound: Yes");	
 		}
@@ -267,14 +269,16 @@ void Screen::createMenu(GAMESTATE which) {
 }
 
 void Screen::createMusic() {
-
-	if (!backgroundMusic.openFromFile("resources/sounds/main_menu.ogg")){
+	if (!buffer.loadFromFile("resources/sounds/main_menu.ogg"))
+	{
 		std::cerr << "Error loading background music" << std::endl;
 	}
-	else {
-		backgroundMusic.setVolume(50);
-		//backgroundMusic.setLoop(true); 
-		backgroundMusic.play();
+	else 
+	{
+		bgMusic.setBuffer(buffer);
+		bgMusic.setLoop(true);
+		bgMusic.setVolume(70);
+		bgMusic.play();
 	}
 }
 

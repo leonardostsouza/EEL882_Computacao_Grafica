@@ -16,7 +16,7 @@ class Screen
 public:
 	Screen(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Screen();
-	GAMESTATE eventHandler(GAMESTATE localstate);
+	GAMESTATE eventHandler(GAMESTATE localstate, sf::Event event);
 
 protected:
 	void createBackground();
@@ -35,7 +35,7 @@ private:
 	//sf::Text menu[4];
 	sf::Font font;
 	sf::SoundBuffer buffer;
-	sf::Music backgroundMusic;
+	sf::Sound bgMusic;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
 };

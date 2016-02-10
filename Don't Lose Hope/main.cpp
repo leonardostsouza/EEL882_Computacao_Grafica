@@ -53,11 +53,11 @@ int main(int argc, char *argv[])
 
             switch (state){
                 case MAINMENU:
-                    state = screen.eventHandler(state);
+                    state = screen.eventHandler(state, event);
                     break;
 
                 case OPTIONSMENU:
-                    state = screen.eventHandler(state);
+                    state = screen.eventHandler(state, event);
                     break;
 
                 case PLAYING:
