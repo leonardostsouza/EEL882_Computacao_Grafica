@@ -70,13 +70,22 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
 
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{
-						nextState = PLAYING;
-						#ifdef DEBUG	                  
-	                    std::cout << "DEBUG === GAMESTATE = \"PLAYING\"" << std::endl;            
-	                    #endif  
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
 					}
+
+					if (clickEnable)
+					{
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							clickEnable = false;
+							nextState = PLAYING;
+							#ifdef DEBUG	                  
+		                    std::cout << "DEBUG === GAMESTATE = \"PLAYING\"" << std::endl;            
+		                    #endif
+						}						
+					}
+					
 				}			
 				// CONTINUE
 				else if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
@@ -85,6 +94,10 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 					changeMenuColor(1);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
+
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
 				}
 				// OPTIONS
 				else if ((mousePos.y >= ((float)((vmode.height / 3) + (3*vmode.height / 12))))
@@ -93,13 +106,20 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 					changeMenuColor(2);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (3*vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
+
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
 					
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{
-						nextState = OPTIONSMENU;
-						#ifdef DEBUG	                  
-	                    std::cout << "DEBUG === GAMESTATE = \"OPTIONSMENU\"" << std::endl;                   
-	                    #endif      
+					if (clickEnable){
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							clickEnable = false;
+							nextState = OPTIONSMENU;
+							#ifdef DEBUG	                  
+		                    std::cout << "DEBUG === GAMESTATE = \"OPTIONSMENU\"" << std::endl;                   
+		                    #endif 
+						}
 					}
 				}
 				// EXIT
@@ -109,19 +129,30 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 					changeMenuColor(3);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (4*vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-						nextState = CLOSE;
-						#ifdef DEBUG	                  
-	                    std::cout << "DEBUG === GAMESTATE = \"CLOSE\"" << std::endl;            
-	                    #endif 
+
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
+
+					if (clickEnable)
+					{
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+							clickEnable = false;
+							nextState = CLOSE;
+							#ifdef DEBUG	                  
+		                    std::cout << "DEBUG === GAMESTATE = \"CLOSE\"" << std::endl;            
+		                    #endif 
+						}
 					}
 				}
 				else
 				{
 					changeMenuColor(-1);
+					clickEnable = false;
 				}
 			}else{
 				changeMenuColor(-1);
+				clickEnable = false;
 			}
 
 			///Add a mouseclick handler. Whenever he changes the screen, changes the state to the desired one :D
@@ -141,12 +172,17 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
 
-					if (event.type == sf::Event::MouseButtonPressed)
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
+
+					if (clickEnable)
 					{
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-
+							clickEnable = false;						
 							if (bgMusic.getStatus() == sf::SoundSource::Status::Playing)
 							{							
+								bgMusic.setVolume(0);
 								bgMusic.stop();
 
 								#ifdef DEBUG
@@ -155,6 +191,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 							}
 							else
 							{
+								bgMusic.setVolume(70);
 								bgMusic.play();
 
 								#ifdef DEBUG
@@ -164,21 +201,37 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 						}
 					}
 				}
-
-				// GO BACK
-				if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
+				// GO BACK TO MAIN MENU
+				else if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
 					&& (mousePos.y <= ((float)((vmode.height / 3) + (3*vmode.height / 12)))))
 				{
 					changeMenuColor(1);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-						nextState = MAINMENU;
-						#ifdef DEBUG	                  
-	                    std::cout << "DEBUG === GAMESTATE = \"MAINMENU\"" << std::endl;            
-	                    #endif 
+
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
+
+					if (clickEnable)
+					{											
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+							clickEnable = false;
+							nextState = MAINMENU;
+							#ifdef DEBUG	                  
+		                    std::cout << "DEBUG === GAMESTATE = \"MAINMENU\"" << std::endl;            
+		                    #endif 
+						}
 					}
 				}
+				else
+				{
+					clickEnable = false;
+				}
+			}
+			else
+			{
+				clickEnable = false;
 			}			
 		}
 

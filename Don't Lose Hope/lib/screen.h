@@ -38,6 +38,7 @@ private:
 	sf::Sound bgMusic;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
+	bool clickEnable;
 };
 
 #endif
