@@ -53,21 +53,29 @@ int main(int argc, char *argv[])
             switch (state){
                 case MAINMENU:
                     state = screen.eventHandler(state);
-                    std::cout << "Main Menu" << std::endl;
+                    #ifdef DEBUG
+                    std::cout << "DEBUG === GAMESTATE = \"Main Menu\" " << fs << std::endl;
+                    #endif
                     break;
 
                 case OPTIONSMENU:
                     state = screen.eventHandler(state);
-                    std::cout << "Options" << std::endl;
+                    #ifdef DEBUG
+                    std::cout << "DEBUG === GAMESTATE = \"Options Menu\" " << fs << std::endl;
+                    #endif
                     break;
 
                 case PLAYING:
                     state = game.eventHandler(state);
-                    std::cout << "Playing" << std::endl;
+                    #ifdef DEBUG
+                    std::cout << "DEBUG === GAMESTATE = \"Playing\" " << fs << std::endl;
+                    #endif
                     break;                
 
                 case CLOSE:
-                    std::cout << "Close" << std::endl;
+                    #ifdef DEBUG
+                    std::cout << "DEBUG === GAMESTATE = \"Quit\" " << fs << std::endl;
+                    #endif
                     (*window).close();
                     break;
 

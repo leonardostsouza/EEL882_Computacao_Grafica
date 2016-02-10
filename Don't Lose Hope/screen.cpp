@@ -67,7 +67,11 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					changeMenuColor(0);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
-					nextState = PLAYING;
+
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{
+						nextState = PLAYING;
+					}
 				}			
 				// CONTINUE
 				else if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
@@ -84,7 +88,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					changeMenuColor(2);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (3*vmode.height / 12) + (vmode.height / 64)));
 					window->draw(highlight);
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{
 						nextState = OPTIONSMENU;
 					}
 				}
@@ -153,7 +159,15 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 
 void Screen::createBackground() {
 	std::string fileName;
-	fileName = "resources/images/menu_background_full.png";
+
+	if (fullscreen){
+		fileName = "resources/images/menu_background_fullscreen.png";
+	} 
+	else 
+	{
+		fileName = "resources/images/menu_background_window.png";
+	}
+	
 
 	if (!texture.loadFromFile(fileName)) {
 		std::cerr << "Error loading background" << std::endl;
