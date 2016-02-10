@@ -9,7 +9,7 @@ Screen::Screen(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), f
 	// Drawing the menu
 	//createMenu(MAINMENU);
 
-	// Creating the music
+	// Creating background music
 	createMusic();
 
 	//play();
@@ -144,9 +144,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 
 						//std::cout << sound.getStatus() << std::endl;
-						if (sound.getStatus() == sf::Sound::Playing)
+						if (backgroundMusic.getStatus() == sf::SoundSource::Status::Playing)
 						{							
-							this->sound.stop();
+							backgroundMusic.stop();
 
 							#ifdef DEBUG
 							std::cout << "DEBUG === SOUND OFF " << std::endl;
@@ -154,7 +154,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						}
 						else
 						{
-							this->sound.play();
+							backgroundMusic.play();
 
 							#ifdef DEBUG
 							std::cout << "DEBUG === SOUND ON " << std::endl;
@@ -247,9 +247,12 @@ void Screen::createMenu(GAMESTATE which) {
 		menu.clear();
 		menu.resize(2);	
 		menu[0].setCharacterSize(vmode.height / 12);
-		if (sound.getStatus() == sf::Sound::Playing){
+		if (backgroundMusic.getStatus() == sf::SoundSource::Status::Playing)
+		{
 			menu[0].setString("Sound: Yes");	
-		}else{
+		}
+		else
+		{
 			menu[0].setString("Sound: No");	
 		}
 		menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.height / 12)) });
@@ -265,14 +268,13 @@ void Screen::createMenu(GAMESTATE which) {
 
 void Screen::createMusic() {
 
-	if (!buffer.loadFromFile("resources/sounds/main_menu.ogg")){
-		std::cerr << "Error loading sound" << std::endl;
+	if (!backgroundMusic.openFromFile("resources/sounds/main_menu.ogg")){
+		std::cerr << "Error loading background music" << std::endl;
 	}
 	else {
-		sound.setBuffer(buffer);
-		sound.setLoop(true);
-		sound.setVolume(70);
-		sound.play();
+		backgroundMusic.setVolume(50);
+		//backgroundMusic.setLoop(true); 
+		backgroundMusic.play();
 	}
 }
 

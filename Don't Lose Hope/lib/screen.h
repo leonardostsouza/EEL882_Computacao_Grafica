@@ -35,7 +35,7 @@ private:
 	//sf::Text menu[4];
 	sf::Font font;
 	sf::SoundBuffer buffer;
-	sf::Sound sound;
+	sf::Music backgroundMusic;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
 };
