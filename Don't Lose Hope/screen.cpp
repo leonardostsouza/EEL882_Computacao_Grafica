@@ -24,7 +24,9 @@ void Screen::changeMenuColor(int op){
 	for (int i = 0; i < menu.size(); i++) {
 		if (op == i){
 			menu[i].setColor(sf::Color(255, 255, 0));
-		}else{
+		}
+		else
+		{
 			menu[i].setColor(sf::Color(0, 0, 0));
 		}
 	}
@@ -42,8 +44,6 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				bgMusic.play();
 			}	
 		}
-
-		//bgMusic.play();
 
 		//check mouse position on main screen
 		sf::Vector2i mousePos=sf::Mouse::getPosition(*window);

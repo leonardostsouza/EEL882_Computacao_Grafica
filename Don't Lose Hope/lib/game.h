@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <stdio.h>
+#include <fstream>
 #include "utilities.h"
 
 class Game
@@ -23,21 +23,23 @@ protected:
 	void setFullscreen(bool fs);
 	void createGrid();
 	void loadTextures();
+	void mapParser(std::string mapFile);
 
 private:
 	bool fullscreen;
+	bool enableDrawing;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
 	sf::Sprite background;
-	//sf::Text menu[4];
 	sf::Font font;
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
+	std::vector<sf::Texture> player = std::vector<sf::Texture>(8);
 	sf::Texture house;
-	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(7,std::vector<sf::RectangleShape>(6));
+	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 };
 
 #endif
