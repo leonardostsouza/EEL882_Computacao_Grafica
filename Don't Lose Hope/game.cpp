@@ -64,10 +64,10 @@ void Game::createMusic() {
 		std::cerr << "Error loading sound" << std::endl;
 	}
 	else {
-		sound.setBuffer(buffer);
-		sound.setLoop(true);
-		sound.setVolume(70);
-		sound.play();
+		bgMusic.setBuffer(buffer);
+		bgMusic.setLoop(true);
+		bgMusic.setVolume(70);
+		//bgMusic.play();
 	}
 }
 
@@ -92,19 +92,22 @@ void Game::createGrid(){
 		}
 	}
 }
-GAMESTATE Game::eventHandler(GAMESTATE localstate) {
-	(*window).clear();
-	/*while ((*window).isOpen())
+GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEnabled) 
+{
+	// Play background music
+	if (isSoundEnabled)
 	{
-		// check all the window's events that were triggered since the last iteration of the loop
-		sf::Event event;
-		while ((*window).pollEvent(event))
+		if (bgMusic.getStatus() != sf::SoundSource::Status::Playing)
 		{
-			// close window event
-			if (event.type == sf::Event::Closed)
-				(*window).close();
-		}*/
+			bgMusic.play();
+		}	
+	}
+	
+
+	(*window).clear();
 	(*window).draw(background);
+
+	GAMESTATE nextState = PLAYING;
 
 	grid[0][0].setFillColor(sf::Color::White);
 	grid[0][0].setTexture(&obstacles[0]);
@@ -123,9 +126,9 @@ GAMESTATE Game::eventHandler(GAMESTATE localstate) {
 	//for (std::vector<sf::RectangleShape>::iterator elem = grid.begin(); elem != grid.end(); elem++) {
 	//	for (std::vector<sf::RectangleShape>::iterator op = elem.begin(); op != elem.end(); op++) {
 //			(*window).draw(*op);
-		for (int i = 0; i < grid.size(); i++)
-			for (int j = 0; j < grid[i].size(); j++)
-				(*window).draw(grid[i][j]);
+	for (int i = 0; i < grid.size(); i++)
+		for (int j = 0; j < grid[i].size(); j++)
+			(*window).draw(grid[i][j]);
 
 	
 	
@@ -137,7 +140,7 @@ GAMESTATE Game::eventHandler(GAMESTATE localstate) {
 	
 	
 	
-	GAMESTATE nextState = PLAYING;
+	
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		nextState = MAINMENU;
@@ -145,6 +148,11 @@ GAMESTATE Game::eventHandler(GAMESTATE localstate) {
 	
 
 	(*window).display();
+
+	// Stop music if exiting PLAYING state
+	if (nextState != PLAYING){
+		bgMusic.stop();
+	}
 
 	return nextState;
 }

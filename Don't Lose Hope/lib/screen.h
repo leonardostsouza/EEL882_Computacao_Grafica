@@ -18,17 +18,21 @@ public:
 	~Screen();
 	GAMESTATE eventHandler(GAMESTATE localstate, sf::Event event);
 
+	bool isFullscreen();
+	bool isSoundEnabled();	
+
 protected:
 	void createBackground();
 	void createMenu(GAMESTATE which);
 	void createMusic();
 	void changeMenuColor(int menuop);
-	bool isFullscreen();
+
+	void setSoundEnabled(bool se);
 	void setFullscreen(bool fs);
-	//void play();
 
 private:
 	bool fullscreen;
+	bool soundEnabled;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
 	sf::Sprite background;

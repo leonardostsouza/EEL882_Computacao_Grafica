@@ -31,22 +31,19 @@ void Screen::changeMenuColor(int op){
 }
 
 GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
-	/*while ((*window).isOpen())
-	{
-		// check all the window's events that were triggered since the last iteration of the loop
-		sf::Event event;
-		while ((*window).pollEvent(event))
-		{
-			// close window event
-			if (event.type == sf::Event::Closed)
-				(*window).close();
-		}*/
-
-		
 		(*window).clear();
 		(*window).draw(background);
 		createMenu(localstate);
 		GAMESTATE nextState;
+
+		if (isSoundEnabled()){
+			if (bgMusic.getStatus() != sf::SoundSource::Status::Playing)
+			{
+				bgMusic.play();
+			}	
+		}
+
+		//bgMusic.play();
 
 		//check mouse position on main screen
 		sf::Vector2i mousePos=sf::Mouse::getPosition(*window);
@@ -181,8 +178,8 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 							clickEnable = false;						
 							if (bgMusic.getStatus() == sf::SoundSource::Status::Playing)
-							{							
-								bgMusic.setVolume(0);
+							{			
+								setSoundEnabled(false);			
 								bgMusic.stop();
 
 								#ifdef DEBUG
@@ -191,7 +188,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 							}
 							else
 							{
-								bgMusic.setVolume(70);
+								setSoundEnabled(true);	
 								bgMusic.play();
 
 								#ifdef DEBUG
@@ -235,14 +232,18 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 			}			
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-			nextState = CLOSE;
-		}
+//		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+//			nextState = CLOSE;
+//		}
 
 		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
 				(*window).draw(*op);
 			}
 		(*window).display();
+
+		if (nextState != MAINMENU && nextState != OPTIONSMENU){
+			bgMusic.stop();
+		}
 
 		return nextState;
 	}
@@ -341,10 +342,20 @@ void Screen::createMusic() {
 
 bool Screen::isFullscreen()
 {
-	return this->fullscreen;
+	return fullscreen;
 }
 
 void Screen::setFullscreen(bool fs)
 {
-	this->fullscreen = fs;
+	fullscreen = fs;
+}
+
+bool Screen::isSoundEnabled()
+{
+	return soundEnabled;
+}
+
+void Screen::setSoundEnabled(bool se)
+{
+	soundEnabled = se;
 }

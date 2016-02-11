@@ -14,7 +14,7 @@ class Game
 public:
 	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Game();
-	GAMESTATE eventHandler(GAMESTATE localstate);
+	GAMESTATE eventHandler(sf::Event event, bool isFullscren, bool isSoundEnabled);
 
 protected:
 	void createBackground();
@@ -32,7 +32,7 @@ private:
 	//sf::Text menu[4];
 	sf::Font font;
 	sf::SoundBuffer buffer;
-	sf::Sound sound;
+	sf::Sound bgMusic;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);

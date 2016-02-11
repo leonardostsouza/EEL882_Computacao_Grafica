@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     // Create the main window
     window = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
-	Screen screen(fs,window,vmode);
+	Screen menu(fs,window,vmode);
     Game game(fs,window,vmode);
 
     while ((*window).isOpen())
@@ -53,15 +53,15 @@ int main(int argc, char *argv[])
 
             switch (state){
                 case MAINMENU:
-                    state = screen.eventHandler(state, event);
+                    state = menu.eventHandler(state, event);
                     break;
 
                 case OPTIONSMENU:
-                    state = screen.eventHandler(state, event);
+                    state = menu.eventHandler(state, event);
                     break;
 
                 case PLAYING:
-                    state = game.eventHandler(state);
+                    state = game.eventHandler(event, menu.isFullscreen(), menu.isSoundEnabled());
                     break;                
 
                 case CLOSE:
