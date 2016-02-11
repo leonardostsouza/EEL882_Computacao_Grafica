@@ -14,8 +14,6 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fulls
 
 	// Creating the music
 	createMusic();
-
-	//play();
 }
 
 
@@ -26,7 +24,7 @@ Game::~Game()
 void Game::loadTextures()
 {
 		// Obstacles textures
-		if(!obstacles[0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!obstacles[0].loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
 			std::cerr << "Error loading sprites" << std::endl;
 
 		if(!obstacles[1].loadFromFile("resources/images/sprites.png", sf::IntRect(2,180,44,42)))
@@ -158,27 +156,23 @@ void Game::mapParser(std::string mapName)
 	      			spriteY = std::stoi(value);
 	      			value.clear();
 
-	      			//std::cout << iterator << " " << spriteType << " " << spriteX << " " << spriteY << std::endl;
-
 	      			// draw sprite
 	      			if (spriteX >= 0 && spriteX < grid.size() && spriteY >= 0 && spriteY < grid[0].size()){
 		      			grid[spriteX][spriteY].setFillColor(sf::Color::White);
 
-		      			std::cout << iterator << " " << spriteType << " " << spriteX << " " << spriteY << std::endl;
-
 		      			switch (spriteType)
 		      			{
 		      				case O1:		      				
-								grid[spriteX][spriteY].setTexture(&obstacles[1]);
+								grid[spriteX][spriteY].setTexture(&obstacles[0]);
 								break;
 							case O2:
-								grid[spriteX][spriteY].setTexture(&obstacles[2]);
+								grid[spriteX][spriteY].setTexture(&obstacles[1]);
 								break;
 							case O3:
-								grid[spriteX][spriteY].setTexture(&obstacles[3]);
+								grid[spriteX][spriteY].setTexture(&obstacles[2]);
 								break;
 							case O4:
-								grid[spriteX][spriteY].setTexture(&obstacles[4]);
+								grid[spriteX][spriteY].setTexture(&obstacles[3]);
 								break;
 							case HOUSE:
 								grid[spriteX][spriteY].setTexture(&house);
@@ -232,38 +226,10 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 
 	GAMESTATE nextState = PLAYING;
 
-	/*grid[0][0].setFillColor(sf::Color::White);
-	grid[0][0].setTexture(&obstacles[0]);
-	grid[0][1].setFillColor(sf::Color::White);
-	grid[0][1].setTexture(&obstacles[1]);
-	grid[0][2].setFillColor(sf::Color::White);
-	grid[0][2].setTexture(&obstacles[2]);
-	grid[0][3].setFillColor(sf::Color::White);
-	grid[0][3].setTexture(&obstacles[3]);
-	grid[0][4].setFillColor(sf::Color::White);
-	grid[0][4].setTexture(&obstacles[4]);
-	grid[0][5].setFillColor(sf::Color::White);
-	grid[0][5].setTexture(&house);*/
-
-	//Draws the grid
-	//for (std::vector<sf::RectangleShape>::iterator elem = grid.begin(); elem != grid.end(); elem++) {
-	//	for (std::vector<sf::RectangleShape>::iterator op = elem.begin(); op != elem.end(); op++) {
-//			(*window).draw(*op);
 	for (int i = 0; i < grid.size(); i++)
 		for (int j = 0; j < grid[i].size(); j++)
 			(*window).draw(grid[i][j]);
 
-	
-	
-
-	
-
-	//std::cout << "W: " << (float)vmode.width << " | H: " << (float)vmode.height << std::endl;
-
-	
-	
-	
-	
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		nextState = MAINMENU;
