@@ -21,6 +21,8 @@ protected:
 	void createMusic();
 	bool isFullscreen();
 	void setFullscreen(bool fs);
+	void createGrid();
+	void loadTextures();
 
 private:
 	bool fullscreen;
@@ -33,6 +35,9 @@ private:
 	sf::Sound sound;
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
+	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
+	sf::Texture house;
+	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(7,std::vector<sf::RectangleShape>(6));
 };
 
 #endif

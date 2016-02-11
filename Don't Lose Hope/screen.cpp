@@ -235,6 +235,10 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 			}			
 		}
 
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+			nextState = CLOSE;
+		}
+
 		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
 				(*window).draw(*op);
 			}
