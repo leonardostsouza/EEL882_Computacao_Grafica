@@ -120,7 +120,7 @@ void Game::createGrid()
 			grid[i][j].setFillColor(sf::Color::Transparent);
 			grid[i][j].setOutlineColor(sf::Color::Black);
 			grid[i][j].setOutlineThickness(1);
-			grid[i][j].setPosition(160+(51*j),60+(i*51));
+			grid[i][j].setPosition(160+(51*i),60+(j*51));
 		}
 	}
 }
