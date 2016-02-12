@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    GAMESTATE state = MAINMENU, prevState = state;
+    GAMESTATE state = PLAYING, prevState = state;
 	bool fs = false;
     // check for execution flags
     #ifdef DEBUG

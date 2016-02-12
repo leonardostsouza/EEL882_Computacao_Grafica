@@ -30,6 +30,7 @@ private:
 	const float Speed = 50.f;
 	bool fullscreen;
 	bool enableDrawing;
+	bool changeSide = false;
 	int moving = 0;
 	int movecounter = 0;
 	sf::Clock ClockAnimation;
@@ -44,7 +45,7 @@ private:
 	sf::Texture texture;
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
-	std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(3));
+	std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	sf::Texture house;
 	sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));

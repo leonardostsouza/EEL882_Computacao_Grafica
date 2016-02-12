@@ -52,40 +52,61 @@
 			if(!player[0][0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[1][0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,82,39,41)))
+			if(!player[0][1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[1][1].loadFromFile("resources/images/sprites.png", sf::IntRect(68,82,39,41)))
+			if(!player[0][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[1][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,82,39,41)))
+			if(!player[0][3].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[2][0].loadFromFile("resources/images/sprites.png", sf::IntRect(170,82,39,41)))
+			if(!player[1][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,40,38,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[2][1].loadFromFile("resources/images/sprites.png", sf::IntRect(204,82,39,41)))
+			if(!player[1][1].loadFromFile("resources/images/sprites.png", sf::IntRect(70,40,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[2][2].loadFromFile("resources/images/sprites.png", sf::IntRect(170,82,39,41)))
+			if(!player[1][2].loadFromFile("resources/images/sprites.png", sf::IntRect(35,40,38,41)))
+				std::cerr << "Error loading sprites" << std::endl;
+
+			if(!player[1][3].loadFromFile("resources/images/sprites.png", sf::IntRect(70,40,39,41)))
+				std::cerr << "Error loading sprites" << std::endl;
+
+			if(!player[2][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,125,38,41)))
+				std::cerr << "Error loading sprites" << std::endl;
+
+			if(!player[2][1].loadFromFile("resources/images/sprites.png", sf::IntRect(35,125,39,41)))
+				std::cerr << "Error loading sprites" << std::endl;
+
+			if(!player[2][2].loadFromFile("resources/images/sprites.png", sf::IntRect(70,125,38,41)))
 				std::cerr << "Error loading sprites" << std::endl;			
 
-			if(!player[3][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,0,39,41)))
+			if(!player[2][3].loadFromFile("resources/images/sprites.png", sf::IntRect(35,125,39,41)))
+				std::cerr << "Error loading sprites" << std::endl;			
+
+			if(!player[3][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,0,37,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
 			if(!player[3][1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[3][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+			if(!player[3][2].loadFromFile("resources/images/sprites.png", sf::IntRect(71,0,38,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[4][0].loadFromFile("resources/images/sprites.png", sf::IntRect(170,0,39,41)))
+			if(!player[3][3].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+				std::cerr << "Error loading sprites" << std::endl;
+
+			if(!player[4][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,82,38,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 			
-			if(!player[4][1].loadFromFile("resources/images/sprites.png", sf::IntRect(238,0,39,41)))
+			if(!player[4][1].loadFromFile("resources/images/sprites.png", sf::IntRect(35,82,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;
 
-			if(!player[4][2].loadFromFile("resources/images/sprites.png", sf::IntRect(170,0,39,41)))
+			if(!player[4][2].loadFromFile("resources/images/sprites.png", sf::IntRect(70,82,38,41)))
+				std::cerr << "Error loading sprites" << std::endl;		
+
+			if(!player[4][3].loadFromFile("resources/images/sprites.png", sf::IntRect(35,82,39,41)))
 				std::cerr << "Error loading sprites" << std::endl;		
 
 			enableDrawing = true;
@@ -170,8 +191,9 @@
 		}
 
 		if (moving != 0){
-			if (ClockAnimation.getElapsedTime().asSeconds() >= 0.5f){
-				if (movecounter > 2) movecounter = 0;
+			if (ClockAnimation.getElapsedTime().asSeconds() >= 0.5f or changeSide == true){
+				changeSide = false;
+				if (movecounter > 3) movecounter = 0;
 				playerShape.setTexture(&player[moving][movecounter]);
 				movecounter++;
 				ClockAnimation.restart();
@@ -264,7 +286,6 @@
 
 	GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEnabled) 
 	{
-
 		// Play background music
 		if (isSoundEnabled)
 		{
@@ -293,13 +314,25 @@
 		
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-			moving = 1;
+			if (moving != 1){
+				moving = 1;
+				changeSide = true;
+			}	
 		}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-			moving = 2;
+			if (moving != 2){
+				moving = 2;
+				changeSide = true;
+			}
 		}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-			moving = 3;
+			if (moving != 3){
+				moving = 3;
+				changeSide = true;
+			}
 		}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-			moving = 4;
+			if (moving != 4){
+				moving = 4;
+				changeSide = true;
+			}
 		}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 			nextState = MAINMENU;
 		}
