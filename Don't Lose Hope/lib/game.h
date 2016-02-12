@@ -25,6 +25,7 @@ protected:
 	void loadTextures();
 	void mapParser(std::string mapFile);
 	void movePlayer();
+	sf::Vector2f getPlayerPos();
 
 private:
 	const float Speed = 100.f;
