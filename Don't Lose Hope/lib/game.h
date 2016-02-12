@@ -26,7 +26,7 @@ protected:
 	void loadTextures();
 	void mapParser(std::string mapFile);
 	void movePlayer();
-	//sf::Vector2f getPlayerPos();
+	sf::Vector2f getGridPos(sf::Vector2f objPosition); // return grid position from screen position
 
 private:
 	const float Speed = 100.f;

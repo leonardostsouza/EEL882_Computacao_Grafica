@@ -18,7 +18,7 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fulls
 	createMusic();	
 
 	//Setting the playershape
-	(*playerObj).loadShape();
+	(*playerObj).loadShape(((float)vmode.height*0.11));
 }
 
 

@@ -38,7 +38,7 @@ public:
 	void setDirection(int newDirection);
 
 	void loadTextures();
-	void loadShape();
+	void loadShape(int size);
 
 	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	
@@ -53,8 +53,6 @@ private:
 	//unsigned int current_lifes;
 	int direction;
 	int movecounter = 0;
-
-	
 
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;
