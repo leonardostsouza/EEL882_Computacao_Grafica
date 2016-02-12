@@ -191,7 +191,7 @@
 		}
 
 		if (moving != 0){
-			if (ClockAnimation.getElapsedTime().asSeconds() >= 0.5f or changeSide == true){
+			if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f or changeSide == true){
 				changeSide = false;
 				if (movecounter > 3) movecounter = 0;
 				playerShape.setTexture(&player[moving][movecounter]);
@@ -206,6 +206,7 @@
 	{
 		std::ifstream map(mapName);
 		int spriteX, spriteY;
+		int obs = -1;
 
 		enum SPRITETYPE {PLAYER, HOUSE, O1, O2, O3, O4};
 
@@ -241,7 +242,9 @@
 
 			      			switch (spriteType)
 			      			{
-			      				case O1:		      				
+			      				case O1:
+			      					obstaclesPos[obs].x = spriteX;		      				
+			      					obstaclesPos[obs].y = spriteY;
 									grid[spriteX][spriteY].setTexture(&obstacles[0]);
 									break;
 								case O2:
@@ -265,6 +268,14 @@
 									spriteType = HOUSE;
 									break;
 			      			}
+			      			if (spriteType != HOUSE && spriteType != PLAYER){
+			      				if (obs >= 0){
+			      					obstaclesPos[obs].x = spriteX;		      				
+			      					obstaclesPos[obs].y = spriteY;
+			      					std::cout << "Obs " << obs << " | X: " << obstaclesPos[obs].x << " | Y: " << obstaclesPos[obs].y << std::endl;
+			      				}
+			      				obs++;
+			      			} 
 		      			}
 		      		}
 		      		else
@@ -310,8 +321,6 @@
 		for (int i = 0; i < grid.size(); i++)
 			for (int j = 0; j < grid[i].size(); j++)
 				(*window).draw(grid[i][j]);
-
-		
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 			if (moving != 1){

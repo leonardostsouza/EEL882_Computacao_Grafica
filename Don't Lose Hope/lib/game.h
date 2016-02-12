@@ -27,7 +27,7 @@ protected:
 	void movePlayer();
 
 private:
-	const float Speed = 50.f;
+	const float Speed = 100.f;
 	bool fullscreen;
 	bool enableDrawing;
 	bool changeSide = false;
@@ -43,6 +43,7 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
 	sf::Texture texture;
+	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
