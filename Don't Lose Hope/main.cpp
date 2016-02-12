@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     // Create the main window
     window = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
+    (*window).setFramerateLimit(60);
 	Screen menu(fs,window,vmode);
     Game game(fs,window,vmode);
 
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
     {
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while ((*window).pollEvent(event))
+        while ((*window).isOpen()) //.pollEvent(event))
         {
 
             switch (state){

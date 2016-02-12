@@ -14,6 +14,11 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fulls
 
 	// Creating the music
 	createMusic();
+
+	//Setting the playershape
+	playerShape.setSize(sf::Vector2f(50,50));
+	playerShape.setFillColor(sf::Color::White);
+	playerShape.setTexture(&player[0][0]);
 }
 
 
@@ -44,29 +49,44 @@ void Game::loadTextures()
 			std::cerr << "Error loading sprites" << std::endl;
 
 		//Player Textures
-		if(!player[0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[0][0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[1][0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,82,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[1][1].loadFromFile("resources/images/sprites.png", sf::IntRect(68,82,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[3].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[1][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,82,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[4].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[2][0].loadFromFile("resources/images/sprites.png", sf::IntRect(170,82,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[5].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[2][1].loadFromFile("resources/images/sprites.png", sf::IntRect(204,82,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[6].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[2][2].loadFromFile("resources/images/sprites.png", sf::IntRect(170,82,39,41)))
+			std::cerr << "Error loading sprites" << std::endl;			
+
+		if(!player[3][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,0,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
 
-		if(!player[7].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+		if(!player[3][1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 			std::cerr << "Error loading sprites" << std::endl;
+
+		if(!player[3][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
+			std::cerr << "Error loading sprites" << std::endl;
+
+		if(!player[4][0].loadFromFile("resources/images/sprites.png", sf::IntRect(170,0,39,41)))
+			std::cerr << "Error loading sprites" << std::endl;
+		
+		if(!player[4][1].loadFromFile("resources/images/sprites.png", sf::IntRect(238,0,39,41)))
+			std::cerr << "Error loading sprites" << std::endl;
+
+		if(!player[4][2].loadFromFile("resources/images/sprites.png", sf::IntRect(170,0,39,41)))
+			std::cerr << "Error loading sprites" << std::endl;		
 
 		enableDrawing = true;
 }
@@ -121,6 +141,37 @@ void Game::createGrid()
 			grid[i][j].setPosition(160+(51*i),60+(j*51));
 		}
 	}
+}
+
+void Game::movePlayer(){
+	//0 CIMA
+	//1 DIREITA
+	//2 BAIXO
+	//3 ESQUERDA
+	switch(moving){
+		case 0:
+			break;
+		case 1:
+			playerPos.y = playerPos.y - 1;
+			break;
+		case 2:
+			playerPos.x = playerPos.x + 1;
+			playerShape.setTexture(&player[moving][movecounter]);
+			break;
+		case 3:
+			playerPos.y = playerPos.y + 1;
+			playerShape.setTexture(&player[moving][movecounter]);
+			break;
+		case 4:
+			playerPos.x = playerPos.x - 1;
+			playerShape.setTexture(&player[moving][movecounter]);
+			break;
+		default:
+			std::cout << "Something's wrong!" << std::endl;
+	}
+	movecounter++;
+	if (movecounter > 4) movecounter = 0;
+	playerShape.setPosition(playerPos);
 }
 
 void Game::mapParser(std::string mapName)
@@ -179,7 +230,10 @@ void Game::mapParser(std::string mapName)
 								spriteType = O1;
 								break;
 							default:
-								grid[spriteX][spriteY].setTexture(&player[0]);
+								playerShape.setPosition(grid[spriteX][spriteY].getPosition());
+								playerPos.x = playerShape.getPosition().x;
+								playerPos.y = playerShape.getPosition().y;
+								grid[spriteX][spriteY].setFillColor(sf::Color::Transparent);
 								spriteType = HOUSE;
 								break;
 		      			}
@@ -230,12 +284,22 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 		for (int j = 0; j < grid[i].size(); j++)
 			(*window).draw(grid[i][j]);
 
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		nextState = MAINMENU;
-	}
 	
 
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+		moving = 1;
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+		moving = 2;
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+		moving = 3;
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+		moving = 4;
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+		nextState = MAINMENU;
+	}
+
+	movePlayer();	
+	(*window).draw(playerShape);
 	(*window).display();
 
 	// Stop music if exiting PLAYING state
