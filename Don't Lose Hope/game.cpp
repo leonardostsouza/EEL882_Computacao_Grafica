@@ -93,13 +93,13 @@ void Game::setFullscreen(bool fs)
 	this->fullscreen = fs;
 }
 
-/*
-sf::Vector2f Game::getPlayerPos(){
+
+sf::Vector2f Game::getGridPos(sf::Vector2f objPosition){
 	sf::Vector2f pos;
-	pos.x = (playerPos.x - 160) / 51;
-	pos.y = (playerPos.y - 60) / 51;
+	pos.x = (objPosition.x - ((float)vmode.width*1/4)) / ((float)vmode.height*0.11);
+	pos.y = (objPosition.y - ((float)vmode.width*1/8)) / ((float)vmode.height*0.11);
 	return pos;
-}*/
+}
 
 void Game::createGrid()
 {
