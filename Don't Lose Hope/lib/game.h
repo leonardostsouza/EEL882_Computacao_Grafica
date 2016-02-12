@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include "utilities.h"
+#include "player.h"
 
 class Game
 {
@@ -25,18 +26,19 @@ protected:
 	void loadTextures();
 	void mapParser(std::string mapFile);
 	void movePlayer();
-	sf::Vector2f getPlayerPos();
+	//sf::Vector2f getPlayerPos();
 
 private:
 	const float Speed = 100.f;
 	bool fullscreen;
 	bool enableDrawing;
 	bool changeSide = false;
-	int moving = 0;
+
+	
 	int movecounter = 0;
-	sf::Clock ClockAnimation;
-	sf::Clock ClockSpeed;
-	sf::Vector2f playerPos;
+	//sf::Clock ClockAnimation;
+	//sf::Clock ClockSpeed;
+	//sf::Vector2f playerPos;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
 	sf::Sprite background;
@@ -47,10 +49,15 @@ private:
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
-	std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
+	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	sf::Texture house;
-	sf::RectangleShape playerShape;
+	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
+
+	enum DIRECTION {STOPPED, UP, RIGHT, DOWN, LEFT};
+	int moving;
+
+	Player* playerObj;
 };
 
 #endif

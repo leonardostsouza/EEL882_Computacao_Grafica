@@ -2,6 +2,8 @@
 
 Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fullscreen (fs) , vmode (vm) 
 {
+	//create player
+	playerObj = new Player();
 
 	// Create the background
 	createBackground();
@@ -9,16 +11,14 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fulls
 	//Create the grid
 	createGrid();
 
-	//Load the textures
+	//Load the player
 	loadTextures();
 
 	// Creating the music
-	createMusic();
+	createMusic();	
 
 	//Setting the playershape
-	playerShape.setSize(sf::Vector2f(50,50));
-	playerShape.setFillColor(sf::Color::White);
-	playerShape.setTexture(&player[0][0]);
+	(*playerObj).loadShape();
 }
 
 
@@ -28,7 +28,7 @@ Game::~Game()
 
 void Game::loadTextures()
 {
-		// Obstacles textures
+	// Obstacles textures
 	if(!obstacles[0].loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
 		std::cerr << "Error loading sprites" << std::endl;
 
@@ -44,70 +44,12 @@ void Game::loadTextures()
 	if(!obstacles[4].loadFromFile("resources/images/sprites.png", sf::IntRect(6,487,47,40)))
 		std::cerr << "Error loading sprites" << std::endl;
 
-		// House Texture
+	// House Texture
 	if(!house.loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
 		std::cerr << "Error loading sprites" << std::endl;
 
-		//Player Textures
-	if(!player[0][0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[0][1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[0][2].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[0][3].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[1][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,40,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[1][1].loadFromFile("resources/images/sprites.png", sf::IntRect(70,40,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[1][2].loadFromFile("resources/images/sprites.png", sf::IntRect(35,40,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[1][3].loadFromFile("resources/images/sprites.png", sf::IntRect(70,40,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[2][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,125,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[2][1].loadFromFile("resources/images/sprites.png", sf::IntRect(35,125,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[2][2].loadFromFile("resources/images/sprites.png", sf::IntRect(70,125,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;			
-
-	if(!player[2][3].loadFromFile("resources/images/sprites.png", sf::IntRect(35,125,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;			
-
-	if(!player[3][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,0,37,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[3][1].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[3][2].loadFromFile("resources/images/sprites.png", sf::IntRect(71,0,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[3][3].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[4][0].loadFromFile("resources/images/sprites.png", sf::IntRect(0,82,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[4][1].loadFromFile("resources/images/sprites.png", sf::IntRect(35,82,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!player[4][2].loadFromFile("resources/images/sprites.png", sf::IntRect(70,82,38,41)))
-		std::cerr << "Error loading sprites" << std::endl;		
-
-	if(!player[4][3].loadFromFile("resources/images/sprites.png", sf::IntRect(35,82,39,41)))
-		std::cerr << "Error loading sprites" << std::endl;		
+	//Player Textures
+	(*playerObj).loadTextures();
 
 	enableDrawing = true;
 }
@@ -151,12 +93,13 @@ void Game::setFullscreen(bool fs)
 	this->fullscreen = fs;
 }
 
+/*
 sf::Vector2f Game::getPlayerPos(){
 	sf::Vector2f pos;
 	pos.x = (playerPos.x - 160) / 51;
 	pos.y = (playerPos.y - 60) / 51;
 	return pos;
-}
+}*/
 
 void Game::createGrid()
 {
@@ -171,37 +114,34 @@ void Game::createGrid()
 	}
 }
 
+/*
 void Game::movePlayer(){
-	//0 CIMA
-	//1 DIREITA
-	//2 BAIXO
-	//3 ESQUERDA
 	float ElapsedTime = ClockSpeed.getElapsedTime().asSeconds();
 	ClockSpeed.restart();
 	switch(moving){
-		case 0:
+		case STOPPED:
 		break;
-		case 1:
+		case UP:
 		playerPos.y -= Speed * ElapsedTime;
 		break;
-		case 2:
-		playerPos.x += Speed * ElapsedTime;
-		break;
-		case 3:
+		case DOWN:
 		playerPos.y += Speed * ElapsedTime;
 		break;
-		case 4:
+		case LEFT:
 		playerPos.x -= Speed * ElapsedTime;
 		break;
+		case RIGHT:
+		playerPos.x += Speed * ElapsedTime;
+		break;		
 		default:
 		std::cout << "Something's wrong!" << std::endl;
 	}
 
-	if (moving != 0){
-		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f or changeSide == true){
+	if (moving != STOPPED){
+		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f || changeSide == true){
 			changeSide = false;
 			if (movecounter > 3) movecounter = 0;
-			playerShape.setTexture(&player[moving][movecounter]);
+			(*playerObj).shape.setTexture(&(*playerObj).textures[moving][movecounter]);
 			movecounter++;
 			ClockAnimation.restart();
 		}
@@ -212,14 +152,14 @@ void Game::movePlayer(){
 			if (((playerPos.x >= obstaclesPos[i].x) && (playerPos.x <= (obstaclesPos[i].x + 51))) && ((playerPos.y >= obstaclesPos[i].y) && (playerPos.y <= (obstaclesPos[i].y + 51)))){
 				moving = 0;
 				movecounter = 0;
-				playerShape.setTexture(&player[moving][movecounter]);
+				(*playerObj).shape.setTexture(&(*playerObj).textures[moving][movecounter]);
 				playerPos.x = obstaclesPos[i].x;
 				playerPos.y = obstaclesPos[i].y - 51;
 			}
 		}
 	}
-	playerShape.setPosition(playerPos);
-}
+	(*playerObj).shape.setPosition(playerPos);
+}*/
 
 void Game::mapParser(std::string mapName)
 {
@@ -282,12 +222,14 @@ void Game::mapParser(std::string mapName)
 									grid[spriteX][spriteY].setTexture(&house);
 									spriteType = O1;
 									break;
-								default:
-									playerShape.setPosition(grid[spriteX][spriteY].getPosition());
-									playerPos.x = playerShape.getPosition().x;
-									playerPos.y = playerShape.getPosition().y;
+								case PLAYER:								
+									(*playerObj).shape.setPosition(grid[spriteX][spriteY].getPosition());
+									(*playerObj).position.x = (*playerObj).shape.getPosition().x;
+									(*playerObj).position.y = (*playerObj).shape.getPosition().y;
 									grid[spriteX][spriteY].setFillColor(sf::Color::Transparent);
 									spriteType = HOUSE;
+									break;
+								default:
 									break;
 							}
 						}
@@ -336,37 +278,37 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 		for (int j = 0; j < grid[i].size(); j++)
 			(*window).draw(grid[i][j]);
 
-		if (moving == 0){
+		if ((*playerObj).getDirection() == STOPPED){
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-				if (moving != 1){
-					moving = 1;
-					changeSide = true;
+				if ((*playerObj).getDirection() != UP){
+					(*playerObj).setDirection(UP);
+					(*playerObj).changeSide = true;
 				}	
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-				if (moving != 2){
-					moving = 2;
-					changeSide = true;
+				if (moving != RIGHT){
+					(*playerObj).setDirection(RIGHT);
+					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if (moving != 3){
-					moving = 3;
-					changeSide = true;
+				if (moving != DOWN){
+					(*playerObj).setDirection(DOWN);
+					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-				if (moving != 4){
-					moving = 4;
-					changeSide = true;
+				if (moving != LEFT){
+					(*playerObj).setDirection(LEFT);
+					(*playerObj).changeSide = true;
 				}
 			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-			moving = 0;
+			(*playerObj).stop();
 			movecounter = 0;
 			nextState = MAINMENU;
 		}
 
-		movePlayer();	
-		(*window).draw(playerShape);
+		(*playerObj).move((*playerObj).getDirection());
+		(*window).draw((*playerObj).shape);
 		(*window).display();
 
 	// Stop music if exiting PLAYING state
