@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     // Create the main window
     window = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
     (*window).setFramerateLimit(60);
+    (*window).setVerticalSyncEnabled(true);
 	Screen menu(fs,window,vmode);
     Game game(fs,window,vmode);
 

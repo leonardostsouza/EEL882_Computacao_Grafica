@@ -27,10 +27,13 @@ protected:
 	void movePlayer();
 
 private:
+	const float Speed = 50.f;
 	bool fullscreen;
 	bool enableDrawing;
 	int moving = 0;
 	int movecounter = 0;
+	sf::Clock ClockAnimation;
+	sf::Clock ClockSpeed;
 	sf::Vector2f playerPos;
 	sf::VideoMode vmode;
 	sf::RenderWindow* window;
