@@ -96,8 +96,8 @@ void Game::setFullscreen(bool fs)
 
 sf::Vector2f Game::getGridPos(sf::Vector2f objPosition){
 	sf::Vector2f pos;
-	pos.x = (objPosition.x - ((float)vmode.width*1/4)) / ((float)vmode.height*0.11);
-	pos.y = (objPosition.y - ((float)vmode.width*1/8)) / ((float)vmode.height*0.11);
+	pos.x = (int)round((objPosition.x - ((float)vmode.width*1/4)) / ((float)vmode.height*0.11));
+	pos.y = (int)round((objPosition.y - ((float)vmode.width*1/8)) / ((float)vmode.height*0.11));
 	return pos;
 }
 
@@ -290,8 +290,8 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if (moving != DOWN){
-					(*playerObj).setDirection(DOWN);
+				if (moving != DOWN){					
+					(*playerObj).setDirection(DOWN);				
 					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
@@ -307,11 +307,22 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 			nextState = MAINMENU;
 		}
 
+		// check for player collisions with obstacles
+		for (int i = 0; i < obstaclesPos.size(); i++)
+		{
+			if( getGridPos(obstaclesPos[i]).x == getGridPos((*playerObj).getNextPosition()).x &&
+				getGridPos(obstaclesPos[i]).y == getGridPos((*playerObj).getNextPosition()).y)
+			{
+				(*playerObj).setDirection(STOPPED);
+			}
+		}
+
+		// move player
 		(*playerObj).move((*playerObj).getDirection());
 		(*window).draw((*playerObj).shape);
 		(*window).display();
 
-	// Stop music if exiting PLAYING state
+		// Stop music if exiting PLAYING state
 		if (nextState != PLAYING){
 			enableDrawing = true;
 			bgMusic.stop();

@@ -40,6 +40,8 @@ public:
 	void loadTextures();
 	void loadShape(int size);
 
+	sf::Vector2f getNextPosition();
+
 	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	
 	sf::RectangleShape shape; // Player shape
@@ -53,6 +55,8 @@ private:
 	//unsigned int current_lifes;
 	int direction;
 	int movecounter = 0;
+
+	int shapeSize = 0;
 
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;

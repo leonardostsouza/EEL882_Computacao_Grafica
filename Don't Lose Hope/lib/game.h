@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 #include "utilities.h"
 #include "player.h"
 

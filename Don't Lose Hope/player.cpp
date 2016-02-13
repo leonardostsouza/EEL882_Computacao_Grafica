@@ -106,6 +106,7 @@ void Player::loadTextures()
 
 void Player::loadShape(int size)
 {
+	shapeSize = size;
 	shape.setSize(sf::Vector2f(size,size));
 	shape.setFillColor(sf::Color::White);
 	shape.setTexture(&textures[0][0]);
@@ -137,7 +138,7 @@ void Player::move(int moveDirection)
 		position.x += MOVE_SPEED * ElapsedTime;
 		break;		
 		default:
-		std::cout << "Invalid moveDirection!" << std::endl;
+		std::cout << "Invalid move direction!" << std::endl;
 	}
 
 	if (direction != STOPPED){
@@ -165,6 +166,33 @@ void Player::move(int moveDirection)
 	*/
 	
 	shape.setPosition(position);
+}
+
+sf::Vector2f Player::getNextPosition()
+{
+	sf::Vector2f nextPosition = position;
+
+	switch(direction)
+	{
+		case STOPPED:
+		break;
+		case UP:
+		nextPosition.y -= shapeSize/2;
+		break;
+		case DOWN:
+		nextPosition.y += shapeSize/2;
+		break;
+		case LEFT:
+		nextPosition.x -= shapeSize/2;
+		break;
+		case RIGHT:
+		nextPosition.x += shapeSize/2;
+		break;		
+		default:
+		std::cout << "Invalid move direction!" << std::endl;
+	}
+
+	return nextPosition;
 }
 
 void Player::stop()
