@@ -285,17 +285,17 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 					(*playerObj).changeSide = true;
 				}	
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-				if (moving != RIGHT){
+				if ((*playerObj).getDirection() != RIGHT){
 					(*playerObj).setDirection(RIGHT);
 					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if (moving != DOWN){					
+				if ((*playerObj).getDirection() != DOWN){					
 					(*playerObj).setDirection(DOWN);				
 					(*playerObj).changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-				if (moving != LEFT){
+				if ((*playerObj).getDirection() != LEFT){
 					(*playerObj).setDirection(LEFT);
 					(*playerObj).changeSide = true;
 				}
@@ -303,7 +303,6 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 			(*playerObj).stop();
-			movecounter = 0;
 			nextState = MAINMENU;
 		}
 

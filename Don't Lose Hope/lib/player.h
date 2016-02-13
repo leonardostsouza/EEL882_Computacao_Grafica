@@ -24,7 +24,7 @@ public:
 	Player();
 	~Player();
 
-	// NOT IMPLEMENTED
+	// NOT IMPLEMENTED YET
 	//void setLifes(unsigned int lifeQtt);
 	//unsigned int getLifes();
 

@@ -151,20 +151,6 @@ void Player::move(int moveDirection)
 		}
 	}
 
-/*
-	if (direction == DOWN){
-		for (int i = 0; i < obstaclesPos.size(); i++){
-			if (((playerPosition.x >= obstaclesPos[i].x) && (playerPosition.x <= (obstaclesPos[i].x + 51))) && ((playerPos.y >= obstaclesPos[i].y) && (playerPos.y <= (obstaclesPos[i].y + 51)))){
-				moveDirection = 0;
-				movecounter = 0;
-				shape.setTexture(&textures[moveDirection][movecounter]);
-				playerPosition.x = obstaclesPos[i].x;
-				playerPosition.y = obstaclesPos[i].y - 51;
-			}
-		}
-	}
-	*/
-	
 	shape.setPosition(position);
 }
 
