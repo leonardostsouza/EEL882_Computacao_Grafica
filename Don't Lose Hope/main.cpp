@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     }
 
     sf::VideoMode vmode;
-    sf::RenderWindow* window;
+    sf::RenderWindow* App;
 
     //set VideoMode
     if (!fs)
@@ -40,34 +40,32 @@ int main(int argc, char *argv[])
     }
 
     // Create the main window
-    window = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
-    (*window).setFramerateLimit(60);
-    (*window).setVerticalSyncEnabled(true);
-	Screen menu(fs,window,vmode);
-    Game game(fs,window,vmode);
+    App = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
+    App->setFramerateLimit(60);
+    App->setVerticalSyncEnabled(true);
+	Screen menu(fs,App,vmode);
+    Game game(fs,App,vmode);
 
-    while ((*window).isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while ((*window).isOpen()) //.pollEvent(event))
+    // check all the window's events that were triggered since the last iteration of the loop
+        while (App->isOpen()) //.pollEvent(event))
         {
 
+            sf::Event event;
             switch (state){
                 case MAINMENU:
-                    state = menu.eventHandler(state, event);
+                    state = menu.eventHandler(state);
                     break;
 
                 case OPTIONSMENU:
-                    state = menu.eventHandler(state, event);
+                    state = menu.eventHandler(state);
                     break;
 
                 case PLAYING:
-                    state = game.eventHandler(event, menu.isFullscreen(), menu.isSoundEnabled());
+                    state = game.eventHandler(menu.isFullscreen(), menu.isSoundEnabled());
                     break;                
 
                 case CLOSE:
-                    (*window).close();
+                    App->close();
                     break;
 
                 default:
@@ -75,10 +73,12 @@ int main(int argc, char *argv[])
             }
 
             prevState = state;
-            // close window event
-            //if (event.type == sf::Event::Closed)
-            //    (*window).close();
-        }
+            //close window event
+            App->pollEvent(event);
+            if (event.type == sf::Event::Closed)
+                App->close();
+            //if (event.type == sf::Event::Resized)
+                //App->SetView(view = sf::View(sf::FloatRect(0.f,0.f,static_cast<float>(App->.GetWidth()),static_cast<float>(App->.GetHeight))));
     }
 
    return EXIT_SUCCESS;

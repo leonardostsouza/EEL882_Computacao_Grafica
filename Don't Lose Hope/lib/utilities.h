@@ -9,6 +9,19 @@
 #define DEFAULT_WINDOW_HEIGHT 480
 #endif
 
+#ifndef X_RATIO
+#define X_RATIO 1/4
+#endif
+
+#ifndef Y_RATIO
+#define Y_RATIO 1/9
+#endif
+
+#ifndef MULTIPLIER_RATIO
+#define MULTIPLIER_RATIO 0.105
+#endif
+
+
 enum GAMESTATE {MAINMENU, OPTIONSMENU, PLAYING, CLOSE};
 
 #endif

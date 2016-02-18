@@ -1,6 +1,6 @@
 #include "lib/game.h"
 
-Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fullscreen (fs) , vmode (vm) 
+Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 	//create player
 	playerObj = new Player();
@@ -18,7 +18,7 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fulls
 	createMusic();	
 
 	//Setting the playershape
-	(*playerObj).loadShape(((float)vmode.height*0.11));
+	(*playerObj).loadShape(((float)vmode.height*MULTIPLIER_RATIO));
 }
 
 
@@ -96,8 +96,8 @@ void Game::setFullscreen(bool fs)
 
 sf::Vector2f Game::getGridPos(sf::Vector2f objPosition){
 	sf::Vector2f pos;
-	pos.x = (int)round((objPosition.x - ((float)vmode.width*1/4)) / ((float)vmode.height*0.11));
-	pos.y = (int)round((objPosition.y - ((float)vmode.width*1/8)) / ((float)vmode.height*0.11));
+	pos.x = (int)round((objPosition.x - ((float)vmode.width*X_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
+	pos.y = (int)round((objPosition.y - ((float)vmode.width*Y_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
 	return pos;
 }
 
@@ -105,11 +105,11 @@ void Game::createGrid()
 {
 	for (int i = 0; i < grid.size(); i++){
 		for (int j = 0; j < grid[i].size(); j++){
-			grid[i][j].setSize(sf::Vector2f(((float)vmode.height*0.11),((float)vmode.height*0.11)));
+			grid[i][j].setSize(sf::Vector2f(((float)vmode.height*MULTIPLIER_RATIO),((float)vmode.height*MULTIPLIER_RATIO)));
 			grid[i][j].setFillColor(sf::Color::Transparent);
 			grid[i][j].setOutlineColor(sf::Color::Black);
 			grid[i][j].setOutlineThickness(1);
-			grid[i][j].setPosition(((float)vmode.width*1/4)+(((float)vmode.height*0.11)*i),((float)vmode.width*1/8)+(j*((float)vmode.height*0.11)));
+			grid[i][j].setPosition(((float)vmode.width*X_RATIO)+(((float)vmode.height*MULTIPLIER_RATIO)*i),((float)vmode.width*Y_RATIO)+(j*((float)vmode.height*MULTIPLIER_RATIO)));
 		}
 	}
 }
@@ -251,7 +251,7 @@ void Game::mapParser(std::string mapName)
 
 
 
-GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEnabled) 
+GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled) 
 {
 	// Play background music
 	if (isSoundEnabled)
@@ -263,8 +263,8 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 	}
 	
 
-	(*window).clear();
-	(*window).draw(background);
+	App->clear();
+	App->draw(background);
 
 	if (enableDrawing)
 	{
@@ -276,7 +276,7 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 
 	for (int i = 0; i < grid.size(); i++)
 		for (int j = 0; j < grid[i].size(); j++)
-			(*window).draw(grid[i][j]);
+			App->draw(grid[i][j]);
 
 		if ((*playerObj).getDirection() == STOPPED){
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
@@ -318,8 +318,8 @@ GAMESTATE Game::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEna
 
 		// move player
 		(*playerObj).move((*playerObj).getDirection());
-		(*window).draw((*playerObj).shape);
-		(*window).display();
+		App->draw((*playerObj).shape);
+		App->display();
 
 		// Stop music if exiting PLAYING state
 		if (nextState != PLAYING){

@@ -16,7 +16,7 @@ class Screen
 public:
 	Screen(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Screen();
-	GAMESTATE eventHandler(GAMESTATE localstate, sf::Event event);
+	GAMESTATE eventHandler(GAMESTATE localstate);
 
 	bool isFullscreen();
 	bool isSoundEnabled();	
@@ -34,7 +34,7 @@ private:
 	bool fullscreen;
 	bool soundEnabled;
 	sf::VideoMode vmode;
-	sf::RenderWindow* window;
+	sf::RenderWindow* App;
 	sf::Sprite background;
 	//sf::Text menu[4];
 	sf::Font font;

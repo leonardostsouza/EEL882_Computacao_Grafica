@@ -16,7 +16,7 @@ class Game
 public:
 	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Game();
-	GAMESTATE eventHandler(sf::Event event, bool isFullscren, bool isSoundEnabled);
+	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled);
 
 protected:
 	void createBackground();
@@ -41,7 +41,7 @@ private:
 	//sf::Clock ClockSpeed;
 	//sf::Vector2f playerPos;
 	sf::VideoMode vmode;
-	sf::RenderWindow* window;
+	sf::RenderWindow* App;
 	sf::Sprite background;
 	sf::Font font;
 	sf::SoundBuffer buffer;

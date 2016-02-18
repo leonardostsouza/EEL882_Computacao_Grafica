@@ -1,6 +1,6 @@
 #include "lib/screen.h"
 
-Screen::Screen(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : window (wd), fullscreen (fs) , vmode (vm) 
+Screen::Screen(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 
 	// Create the background
@@ -32,9 +32,9 @@ void Screen::changeMenuColor(int op){
 	}
 }
 
-GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
-		(*window).clear();
-		(*window).draw(background);
+GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
+		App->clear();
+		App->draw(background);
 		createMenu(localstate);
 		GAMESTATE nextState;
 
@@ -46,7 +46,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 		}
 
 		//check mouse position on main screen
-		sf::Vector2i mousePos=sf::Mouse::getPosition(*window);
+		sf::Vector2i mousePos=sf::Mouse::getPosition(*App);
 		sf::RectangleShape highlight;
 		highlight.setSize(sf::Vector2f((vmode.width / 3), (vmode.height / 12)));
 		highlight.setFillColor(sf::Color(0, 102, 204, 60));
@@ -65,7 +65,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(0);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -90,7 +90,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(1);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -102,7 +102,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(2);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (3*vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -125,7 +125,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(3);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (4*vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -167,7 +167,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(0);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -204,7 +204,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 				{
 					changeMenuColor(1);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
-					window->draw(highlight);
+					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 						clickEnable = true;
@@ -237,9 +237,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate, sf::Event event) {
 //		}
 
 		for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
-				(*window).draw(*op);
+				App->draw(*op);
 			}
-		(*window).display();
+		App->display();
 
 		if (nextState != MAINMENU && nextState != OPTIONSMENU){
 			bgMusic.stop();
