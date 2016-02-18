@@ -56,7 +56,8 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 		{
 			nextState = MAINMENU;
 
-			// Menu Options mousover and clicking Handling		
+			// Menu Options mousover and clicking Handling
+			//std::cout << "X: " << vmode.width << " |Y: " << vmode.height << std::endl;
 			if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
 			{
 				// NEW GAME
