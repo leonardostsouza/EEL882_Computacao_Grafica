@@ -40,6 +40,8 @@ public:
 	void loadTextures();
 	void loadShape(int size);
 
+	void setLevel(int i){level = i;}
+
 	sf::Vector2f getNextPosition();
 
 	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
@@ -60,6 +62,7 @@ private:
 
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;
+	int level;
 
 	
 };

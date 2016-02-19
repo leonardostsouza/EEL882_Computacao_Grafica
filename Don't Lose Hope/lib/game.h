@@ -10,13 +10,15 @@
 #include <math.h>
 #include "utilities.h"
 #include "player.h"
+#include "screen.h"
 
 class Game
 {
 public:
-	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
+	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0}, std::vector<std::string> maps = {""});
+//	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Game();
-	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled);
+	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
 
 protected:
 	void createBackground();
@@ -34,8 +36,9 @@ private:
 	bool fullscreen;
 	bool enableDrawing;
 	bool changeSide = false;
-
+	std::vector<std::string> levels;
 	
+	bool left = true;
 	int movecounter = 0;
 	//sf::Clock ClockAnimation;
 	//sf::Clock ClockSpeed;

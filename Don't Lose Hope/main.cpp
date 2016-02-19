@@ -1,6 +1,6 @@
 #include "lib/screen.h"
 #include "lib/game.h"
-//#include "lib/utilities.h"
+//include "lib/utilities.h"
 #include <string.h>
 
 using namespace std;
@@ -45,7 +45,7 @@ sf::View view(App->getDefaultView());
 App->setFramerateLimit(60);
 App->setVerticalSyncEnabled(true);
 Screen* menu = new Screen(fs,App,vmode);
-Game* game = new Game(fs,App,vmode);
+Game* game = new Game(fs,App,vmode,menu->passLevels());
 
     // check all the window's events that were triggered since the last iteration of the loop
     while (App->isOpen()) //.pollEvent(event))
@@ -65,8 +65,11 @@ Game* game = new Game(fs,App,vmode);
         state = menu->eventHandler(state);
         break;
 
+        case CREATING:
+        break;
+
         case PLAYING:
-        state = game->eventHandler(menu->isFullscreen(), menu->isSoundEnabled());
+        state = game->eventHandler(menu->isFullscreen(), menu->isSoundEnabled(),menu->getChosenLevel());
         break;                
 
         case CLOSE:

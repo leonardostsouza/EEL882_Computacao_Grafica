@@ -1,6 +1,7 @@
 #include "lib/game.h"
 
-Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
+Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), fullscreen (fs) , vmode (vm) , levels(maps) 
+//Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 	//create player
 	playerObj = new Player();
@@ -18,7 +19,7 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscre
 	createMusic();	
 
 	//Setting the playershape
-	(*playerObj).loadShape(((float)vmode.height*MULTIPLIER_RATIO));
+	playerObj->loadShape(((float)vmode.height*MULTIPLIER_RATIO));
 }
 
 
@@ -49,7 +50,7 @@ void Game::loadTextures()
 		std::cerr << "Error loading sprites" << std::endl;
 
 	//Player Textures
-	(*playerObj).loadTextures();
+	playerObj->loadTextures();
 
 	enableDrawing = true;
 }
@@ -141,7 +142,7 @@ void Game::movePlayer(){
 		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f || changeSide == true){
 			changeSide = false;
 			if (movecounter > 3) movecounter = 0;
-			(*playerObj).shape.setTexture(&(*playerObj).textures[moving][movecounter]);
+			playerObj->shape.setTexture(&playerObj->textures[moving][movecounter]);
 			movecounter++;
 			ClockAnimation.restart();
 		}
@@ -152,13 +153,13 @@ void Game::movePlayer(){
 			if (((playerPos.x >= obstaclesPos[i].x) && (playerPos.x <= (obstaclesPos[i].x + 51))) && ((playerPos.y >= obstaclesPos[i].y) && (playerPos.y <= (obstaclesPos[i].y + 51)))){
 				moving = 0;
 				movecounter = 0;
-				(*playerObj).shape.setTexture(&(*playerObj).textures[moving][movecounter]);
+				playerObj->shape.setTexture(&playerObj->textures[moving][movecounter]);
 				playerPos.x = obstaclesPos[i].x;
 				playerPos.y = obstaclesPos[i].y - 51;
 			}
 		}
 	}
-	(*playerObj).shape.setPosition(playerPos);
+	playerObj->shape.setPosition(playerPos);
 }*/
 
 void Game::mapParser(std::string mapName)
@@ -223,9 +224,9 @@ void Game::mapParser(std::string mapName)
 									spriteType = O1;
 									break;
 								case PLAYER:								
-									(*playerObj).shape.setPosition(grid[spriteX][spriteY].getPosition());
-									(*playerObj).position.x = (*playerObj).shape.getPosition().x;
-									(*playerObj).position.y = (*playerObj).shape.getPosition().y;
+									playerObj->shape.setPosition(grid[spriteX][spriteY].getPosition());
+									playerObj->position.x = playerObj->shape.getPosition().x;
+									playerObj->position.y = playerObj->shape.getPosition().y;
 									grid[spriteX][spriteY].setFillColor(sf::Color::Transparent);
 									spriteType = HOUSE;
 									break;
@@ -251,7 +252,7 @@ void Game::mapParser(std::string mapName)
 
 
 
-GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled) 
+GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level) 
 {
 	// Play background music
 	if (isSoundEnabled)
@@ -268,7 +269,8 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled)
 
 	if (enableDrawing)
 	{
-		mapParser("resources/maps/phase1");
+		mapParser("resources/maps/" + levels[level]);
+		playerObj->setLevel(level);
 		enableDrawing = false;
 	}
 
@@ -278,47 +280,47 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled)
 		for (int j = 0; j < grid[i].size(); j++)
 			App->draw(grid[i][j]);
 
-		if ((*playerObj).getDirection() == STOPPED){
+		if (playerObj->getDirection() == STOPPED){
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-				if ((*playerObj).getDirection() != UP){
-					(*playerObj).setDirection(UP);
-					(*playerObj).changeSide = true;
+				if (playerObj->getDirection() != UP){
+					playerObj->setDirection(UP);
+					playerObj->changeSide = true;
 				}	
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-				if ((*playerObj).getDirection() != RIGHT){
-					(*playerObj).setDirection(RIGHT);
-					(*playerObj).changeSide = true;
+				if (playerObj->getDirection() != RIGHT){
+					playerObj->setDirection(RIGHT);
+					playerObj->changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if ((*playerObj).getDirection() != DOWN){					
-					(*playerObj).setDirection(DOWN);				
-					(*playerObj).changeSide = true;
+				if (playerObj->getDirection() != DOWN){					
+					playerObj->setDirection(DOWN);				
+					playerObj->changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-				if ((*playerObj).getDirection() != LEFT){
-					(*playerObj).setDirection(LEFT);
-					(*playerObj).changeSide = true;
+				if (playerObj->getDirection() != LEFT){
+					playerObj->setDirection(LEFT);
+					playerObj->changeSide = true;
 				}
 			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-			(*playerObj).stop();
+			playerObj->stop();
 			nextState = MAINMENU;
 		}
 
 		// check for player collisions with obstacles
 		for (int i = 0; i < obstaclesPos.size(); i++)
 		{
-			if( getGridPos(obstaclesPos[i]).x == getGridPos((*playerObj).getNextPosition()).x &&
-				getGridPos(obstaclesPos[i]).y == getGridPos((*playerObj).getNextPosition()).y)
+			if( getGridPos(obstaclesPos[i]).x == getGridPos(playerObj->getNextPosition()).x &&
+				getGridPos(obstaclesPos[i]).y == getGridPos(playerObj->getNextPosition()).y)
 			{
-				(*playerObj).setDirection(STOPPED);
+				playerObj->setDirection(STOPPED);
 			}
 		}
 
 		// move player
-		(*playerObj).move((*playerObj).getDirection());
-		App->draw((*playerObj).shape);
+		playerObj->move(playerObj->getDirection());
+		App->draw(playerObj->shape);
 		App->display();
 
 		// Stop music if exiting PLAYING state
