@@ -54,7 +54,8 @@ private:
 	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
-	sf::Texture house;
+	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
+	sf::Vector2f housePos;
 	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 

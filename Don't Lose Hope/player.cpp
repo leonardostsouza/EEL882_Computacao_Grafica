@@ -2,8 +2,13 @@
 
 Player::Player()
 {
-		//current_lifes = PLAYER_MAX_LIFES;
-		direction = STOPPED;
+	//current_lifes = PLAYER_MAX_LIFES;
+	direction = STOPPED;
+	movecounter = 0;
+	splashCounter = 0;
+	shapeSize = 0;
+	textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
+	splashTextures = std::vector<sf::Texture>(9);
 }
 
 Player::~Player(){}
@@ -99,6 +104,35 @@ void Player::loadTextures()
 	if(!textures[4][3].loadFromFile("resources/images/sprites.png", sf::IntRect(35,82,39,41)))
 	std::cerr << "Error loading player textures" << std::endl;
 
+	// splash textures
+	if(!splashTextures[0].loadFromFile("resources/images/sprites.png", sf::IntRect(345,316,50,50)))
+	std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[1].loadFromFile("resources/images/sprites.png", sf::IntRect(395,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[2].loadFromFile("resources/images/sprites.png", sf::IntRect(445,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[3].loadFromFile("resources/images/sprites.png", sf::IntRect(495,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[4].loadFromFile("resources/images/sprites.png", sf::IntRect(545,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[5].loadFromFile("resources/images/sprites.png", sf::IntRect(595,316,60,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[6].loadFromFile("resources/images/sprites.png", sf::IntRect(645,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[7].loadFromFile("resources/images/sprites.png", sf::IntRect(695,316,50,50)))
+		std::cerr << "Error loading player splash textures" << std::endl;
+
+	if(!splashTextures[8].loadFromFile("resources/images/sprites.png", sf::IntRect(745,316,50,50)))
+	std::cerr << "Error loading player splash textures" << std::endl;
+
+
 	#ifdef DEBUG
 	std::cout << "DEBUG === Finished loading player textures" << std::endl;
 	#endif
@@ -110,6 +144,9 @@ void Player::loadShape(int size)
 	shape.setSize(sf::Vector2f(size,size));
 	shape.setFillColor(sf::Color::White);
 	shape.setTexture(&textures[0][0]);
+
+	movecounter = 0;
+	splashCounter = 0;
 }
 
 void Player::move(int moveDirection)
@@ -119,7 +156,6 @@ void Player::move(int moveDirection)
 	switch(moveDirection){
 		case STOPPED:
 		direction = STOPPED;
-		movecounter = 0;
 		break;
 		case UP:
 		direction = UP;
@@ -184,4 +220,18 @@ sf::Vector2f Player::getNextPosition()
 void Player::stop()
 {
 	this->move(STOPPED);
+}
+
+void Player::splash()
+{ 
+	if (splashCounter < 9)
+	{
+		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f)
+		{
+			shape.setTexture(&splashTextures[splashCounter]);
+			splashCounter++;
+			ClockAnimation.restart();
+		}
+	}
+	
 }

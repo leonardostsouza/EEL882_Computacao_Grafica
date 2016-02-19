@@ -42,23 +42,27 @@ public:
 
 	void setLevel(int i){level = i;}
 
-	sf::Vector2f getNextPosition();
+	void splash();
 
-	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
+	sf::Vector2f getNextPosition();
 	
 	sf::RectangleShape shape; // Player shape
 
 	sf::Vector2f position; // Player position on screen
 
-	bool changeSide = false; // ???????
+	bool changeSide = false;
 protected:
 
 private:
 	//unsigned int current_lifes;
 	int direction;
 	int movecounter = 0;
+	int splashCounter = 0;
 
 	int shapeSize = 0;
+
+	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
+	std::vector<sf::Texture> splashTextures = std::vector<sf::Texture>(9);
 
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;

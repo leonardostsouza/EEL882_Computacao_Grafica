@@ -17,9 +17,6 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::str
 
 	// Creating the music
 	createMusic();	
-
-	//Setting the playershape
-	playerObj->loadShape(((float)vmode.height*MULTIPLIER_RATIO));
 }
 
 
@@ -45,13 +42,17 @@ void Game::loadTextures()
 	if(!obstacles[4].loadFromFile("resources/images/sprites.png", sf::IntRect(6,487,47,40)))
 		std::cerr << "Error loading sprites" << std::endl;
 
-	// House Texture
-	if(!house.loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
+	// House Textures
+	if(!house[0].loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
+		std::cerr << "Error loading sprites" << std::endl;
+
+	if(!house[1].loadFromFile("resources/images/sprites.png", sf::IntRect(258,26,78,67)))
 		std::cerr << "Error loading sprites" << std::endl;
 
 	//Player Textures
 	playerObj->loadTextures();
-
+	
+	std::cout << "loadTextures()" << std::endl;
 	enableDrawing = true;
 }
 
@@ -172,6 +173,17 @@ void Game::mapParser(std::string mapName)
 
 	SPRITETYPE spriteType = PLAYER;
 
+	//clear map textures
+	for (int iterator1 = 0; iterator1 < grid.size(); iterator1++)
+	{
+		for (int iterator2 = 0; iterator2 < grid[iterator1].size(); iterator2++)
+		{
+			grid[iterator1][iterator2].setTexture(NULL);
+			grid[iterator1][iterator2].setFillColor(sf::Color::Transparent);
+		}
+	}
+	std::cout << "parse()" << std::endl;
+
 	if (map.is_open())
 	{	
 		std::string line;
@@ -184,6 +196,8 @@ void Game::mapParser(std::string mapName)
 
 				for(unsigned int iterator = 1; iterator < line.size(); iterator++)
 				{
+
+					// receive coordinates values
 					if (line[iterator] == ',')
 					{
 	      			// Receive x value
@@ -200,7 +214,12 @@ void Game::mapParser(std::string mapName)
 						if (spriteX >= 0 && spriteX < grid.size() && spriteY >= 0 && spriteY < grid[0].size()){
 							grid[spriteX][spriteY].setFillColor(sf::Color::White);
 
-							if (spriteType != HOUSE && spriteType != PLAYER){
+							if (spriteType == HOUSE)
+							{
+								housePos = grid[spriteX][spriteY].getPosition();
+							}
+							else if (spriteType != PLAYER)
+							{
 								obstaclesPos[obs] = grid[spriteX][spriteY].getPosition();
 								obs++;
 							} 
@@ -220,10 +239,12 @@ void Game::mapParser(std::string mapName)
 									grid[spriteX][spriteY].setTexture(&obstacles[3]);
 									break;
 								case HOUSE:
-									grid[spriteX][spriteY].setTexture(&house);
+									grid[spriteX][spriteY].setTexture(&house[0]);
 									spriteType = O1;
 									break;
 								case PLAYER:								
+									//Setting the playershape
+									playerObj->loadShape(((float)vmode.height*MULTIPLIER_RATIO));			
 									playerObj->shape.setPosition(grid[spriteX][spriteY].getPosition());
 									playerObj->position.x = playerObj->shape.getPosition().x;
 									playerObj->position.y = playerObj->shape.getPosition().y;
@@ -314,8 +335,26 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if( getGridPos(obstaclesPos[i]).x == getGridPos(playerObj->getNextPosition()).x &&
 				getGridPos(obstaclesPos[i]).y == getGridPos(playerObj->getNextPosition()).y)
 			{
-				playerObj->setDirection(STOPPED);
+				playerObj->stop();
 			}
+		}
+
+		// check for player "collision" with house
+		if( getGridPos(housePos).x == getGridPos(playerObj->getNextPosition()).x &&
+			getGridPos(housePos).y == getGridPos(playerObj->position).y)
+		{
+			grid[getGridPos(housePos).x ][getGridPos(housePos).y].setTexture(&house[1]);
+			playerObj->stop();
+			playerObj->position.x = -50;
+			playerObj->position.y = -50;
+		}
+
+		// check if player is outside the grid
+		if( getGridPos(playerObj->position).x < -1 || getGridPos(playerObj->position).x > 6 ||
+			getGridPos(playerObj->position).y < -1 || getGridPos(playerObj->position).y > 7)
+		{
+			playerObj->stop();
+			playerObj->splash();
 		}
 
 		// move player
