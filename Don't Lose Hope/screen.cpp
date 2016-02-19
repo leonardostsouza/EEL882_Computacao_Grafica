@@ -48,7 +48,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 		//check mouse position on main screen
 		sf::Vector2i mousePos=sf::Mouse::getPosition(*App);
 		sf::RectangleShape highlight;
-		highlight.setSize(sf::Vector2f((vmode.width / 3), (vmode.height / 12)));
+		highlight.setSize(sf::Vector2f((vmode.width / 2), (vmode.height / 12)));
 		highlight.setFillColor(sf::Color(0, 102, 204, 60));
 
 		// MAIN MENU SCREEN
@@ -97,12 +97,35 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						clickEnable = true;
 					}
 				}
-				// OPTIONS
+				// SCENARIO CREATING
 				else if ((mousePos.y >= ((float)((vmode.height / 3) + (3*vmode.height / 12))))
 					&& (mousePos.y <= ((float)((vmode.height / 3) + (4*vmode.height / 12)))))
 				{
 					changeMenuColor(2);
 					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (3*vmode.height / 12) + (vmode.height / 64)));
+					App->draw(highlight);
+					
+					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+						clickEnable = true;
+					}
+
+					if (clickEnable){
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							clickEnable = false;
+							nextState = CHOOSING;
+							#ifdef DEBUG	                  
+		                    std::cout << "DEBUG === GAMESTATE = \"CHOOSING\"" << std::endl;                   
+		                    #endif 
+						}
+					}
+				}
+				// OPTIONS
+				else if ((mousePos.y >= ((float)((vmode.height / 3) + (4*vmode.height / 12))))
+					&& (mousePos.y <= ((float)((vmode.height / 3) + (5*vmode.height / 12)))))
+				{
+					changeMenuColor(3);
+					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (4*vmode.height / 12) + (vmode.height / 64)));
 					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -121,11 +144,11 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					}
 				}
 				// EXIT
-				else if ((mousePos.y >= ((float)((vmode.height / 3) + (4*vmode.height / 12))))
-					&& (mousePos.y <= ((float)((vmode.height / 3) + (5*vmode.height / 12)))))
+				else if ((mousePos.y >= ((float)((vmode.height / 3) + (5*vmode.height / 12))))
+					&& (mousePos.y <= ((float)((vmode.height / 3) + (6*vmode.height / 12)))))
 				{
-					changeMenuColor(3);
-					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (4*vmode.height / 12) + (vmode.height / 64)));
+					changeMenuColor(4);
+					highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (5*vmode.height / 12) + (vmode.height / 64)));
 					App->draw(highlight);
 
 					if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -152,12 +175,13 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 				changeMenuColor(-1);
 				clickEnable = false;
 			}
-
 			///Add a mouseclick handler. Whenever he changes the screen, changes the state to the desired one :D
-		
+		}
+		else if (localstate == CHOOSING){
+			nextState = CHOOSING;
 		}
 		//OPTIONS MENU SCREEN
-		else
+		else if (localstate == OPTIONSMENU)
 		{
 			nextState = OPTIONSMENU;
 			if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
@@ -227,8 +251,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					clickEnable = false;
 				}
 			}
-			else
-			{
+			else{			
 				clickEnable = false;
 			}			
 		}
@@ -281,7 +304,7 @@ void Screen::createMenu(GAMESTATE which) {
 	if (which == MAINMENU){
 		//set menu size
 		menu.clear();
-		menu.resize(4);
+		menu.resize(5);
 
 		menu[0].setCharacterSize(vmode.height / 12);
 		menu[0].setString("New Game");
@@ -294,16 +317,24 @@ void Screen::createMenu(GAMESTATE which) {
 		menu[1].setFont(font);
 		menu[1].setColor(sf::Color(0, 0, 0));
 		menu[2].setCharacterSize(vmode.height / 12);
-		menu[2].setString("Options");
+		menu[2].setString("Create Scenario");
 		menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.height / 12)) });
 		menu[2].setFont(font);
 		menu[2].setColor(sf::Color(0, 0, 0));
 		menu[3].setCharacterSize(vmode.height / 12);
-		menu[3].setString("Exit");
+		menu[3].setString("Options");
 		menu[3].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 4*(vmode.height / 12)) });
 		menu[3].setFont(font);
 		menu[3].setColor(sf::Color(0, 0, 0));
-	}else{
+		menu[4].setCharacterSize(vmode.height / 12);
+		menu[4].setString("Exit");
+		menu[4].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 5*(vmode.height / 12)) });
+		menu[4].setFont(font);
+		menu[4].setColor(sf::Color(0, 0, 0));
+	}else if (which == CHOOSING) {
+		menu.clear();
+		//menu.resize();
+	}else if (which == OPTIONSMENU){
 		//set menu size
 		menu.clear();
 		menu.resize(2);	

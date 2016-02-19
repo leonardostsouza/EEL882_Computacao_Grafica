@@ -61,6 +61,10 @@ Game* game = new Game(fs,App,vmode);
         state = menu->eventHandler(state);
         break;
 
+        case CHOOSING:
+        state = menu->eventHandler(state);
+        break;
+
         case PLAYING:
         state = game->eventHandler(menu->isFullscreen(), menu->isSoundEnabled());
         break;                
