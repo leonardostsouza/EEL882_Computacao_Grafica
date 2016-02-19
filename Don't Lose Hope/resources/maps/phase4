@@ -1,0 +1,14 @@
+#Example Map
+#|PLAYER_POSITION|HOUSE_POSITION|OBSTACLE1|OBSTACLE2|OBSTACLE3|OBSTACLE4|OBSTACLE5|
+|0,3|2,2|0,4|5,3|4,1|-1,-1|-1,-1|
+#Map Topology:
+#P00000		P-> Player
+#0000X0		H-> House
+#00H000		X-> Obstacle
+#00000X
+#X00000
+#000000
+#000000
+#
+#Usually, a map consists of only one line containing positions
+
