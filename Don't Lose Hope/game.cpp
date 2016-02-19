@@ -51,8 +51,6 @@ void Game::loadTextures()
 
 	//Player Textures
 	playerObj->loadTextures();
-	
-	std::cout << "loadTextures()" << std::endl;
 	enableDrawing = true;
 }
 
@@ -182,7 +180,6 @@ void Game::mapParser(std::string mapName)
 			grid[iterator1][iterator2].setFillColor(sf::Color::Transparent);
 		}
 	}
-	std::cout << "parse()" << std::endl;
 
 	if (map.is_open())
 	{	
