@@ -95,6 +95,10 @@ void MapEditor::setFullscreen(bool fs)
 	this->fullscreen = fs;
 }
 
+void MapEditor::mapWriter(){
+
+}
+
 void MapEditor::changeMouseBox(int type, sf::Texture* txt){
 	delete mouseBox;
 	mouseBox = new sf::RectangleShape;
@@ -105,7 +109,7 @@ void MapEditor::changeMouseBox(int type, sf::Texture* txt){
 	}else{
 		mouseBox->setFillColor(sf::Color::Transparent);
 	}
-	
+
 }
 
 void MapEditor::createGrid()
@@ -123,8 +127,8 @@ void MapEditor::createGrid()
 
 sf::Vector2i MapEditor::getGridPos(sf::Vector2i objPosition){
 	sf::Vector2i pos;
-	pos.x = (int)round((objPosition.x - ((float)vmode.width*X_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
-	pos.y = (int)round((objPosition.y - ((float)vmode.width*Y_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
+	pos.x = (int)round((-(((float)vmode.height*MULTIPLIER_RATIO)/2) + objPosition.x - ((float)vmode.width*X_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
+	pos.y = (int)round((-(((float)vmode.height*MULTIPLIER_RATIO)/2) + objPosition.y - ((float)vmode.width*Y_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
 	return pos;
 }
 
@@ -145,82 +149,120 @@ GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled)
 	for (int i = 0; i<tools.size(); i++){
 		App->draw(tools[i]);
 	}
-	
+
 	mousePos=sf::Mouse::getPosition(*App);
-	
+
 	GAMESTATE nextState = CREATING;
 	if ((mousePos.x >= 20+toolBox.getSize().x/7) && (mousePos.x <= (20+toolBox.getSize().x/7 + ((float)vmode.height*MULTIPLIER_RATIO)))){
 		if ((mousePos.y >= (vmode.height/3.1)) && (mousePos.y <= (vmode.height/3.1)+((float)vmode.height*MULTIPLIER_RATIO))){
-				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-					clickEnable = true;
-				}
+			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+				clickEnable = true;
+			}
 
-				if (clickEnable)
-				{
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{	
+			if (clickEnable)
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{	
+					if (objPosition[0] == sf::Vector2i({-1,-1})){
 						changeMouseBox(WHITE,&sprites[0]);
 						typeChosen = PLAYER;
 						clickEnable = false;
-					}						
-				}
+					}
+				}						
+			}
 		}
 		else if ((mousePos.y >= (vmode.height/3.1)+20+((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+20+2*((float)vmode.height*MULTIPLIER_RATIO))) {
-				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-					clickEnable = true;
-				}
+			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+				clickEnable = true;
+			}
 
-				if (clickEnable)
+			if (clickEnable)
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{
+					if (objPosition[1] == sf::Vector2i({-1,-1})){
 						changeMouseBox(WHITE,&sprites[1]);
 						typeChosen = HOUSE;
 						clickEnable = false;
-					}						
-				}
+					}
+				}						
+			}
 		}
 		else if ((mousePos.y >= (vmode.height/3.1)+40+2*((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+40+3*((float)vmode.height*MULTIPLIER_RATIO))) {
-				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-					clickEnable = true;
-				}
+			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+				clickEnable = true;
+			}
 
-				if (clickEnable)
+			if (clickEnable)
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{
+					if (objPosition[qttObstacles+2] == sf::Vector2i({-1,-1}) && qttObstacles < 5){
 						changeMouseBox(WHITE,&sprites[2]);
 						typeChosen = OBSTACLE;
 						clickEnable = false;
 					}						
 				}
+			}
 		}
 	}else{
 		if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-					clickEnable = true;
+			clickEnable = true;
 		}
 		if (clickEnable){
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-				clickCoord = getGridPos(mousePos);
-				if((clickCoord.x >= 0 && clickCoord.x < 7) && (clickCoord.y >= 0 && clickCoord.y < 7)){
-					grid[clickCoord.x][clickCoord.y].setFillColor(sf::Color::White);
-					if (typeChosen != NONE){
-						grid[clickCoord.x][clickCoord.y].setTexture(&sprites[typeChosen-1]);
+				clickEnable = false;
+
+				if (typeChosen != NONE){
+					clickCoord = getGridPos(mousePos);
+
+					if((clickCoord.x >= 0 && clickCoord.x < 7) && (clickCoord.y >= 0 && clickCoord.y < 7)){
+						if (grid[clickCoord.x][clickCoord.y].getTexture() == NULL){
+							grid[clickCoord.x][clickCoord.y].setFillColor(sf::Color::White);
+							grid[clickCoord.x][clickCoord.y].setTexture(&sprites[typeChosen-1]);
+
+							switch(typeChosen){
+
+								case PLAYER:
+								objPosition[0] = sf::Vector2i({clickCoord.x,clickCoord.y});
+								break;
+
+								case HOUSE:
+								objPosition[1] = sf::Vector2i({clickCoord.x,clickCoord.y});
+								break;
+
+								case OBSTACLE:
+								objPosition[qttObstacles+2] = sf::Vector2i({clickCoord.x,clickCoord.y});
+								qttObstacles++;
+								break;
+
+								default:
+								break;
+							}
+
+							if ((typeChosen != NONE && typeChosen != OBSTACLE) || (typeChosen == OBSTACLE && qttObstacles > 4)){
+								typeChosen = NONE;
+								changeMouseBox(TRANSPARENT);
+							}
+						}
+
+						for (int i = 0; i< objPosition.size(); i++){
+							std::cout << i << " | X: " << objPosition[i].x << " | Y: " << objPosition[i].y << std::endl;
+						}
+						std::cout << typeChosen << std::endl;
 					}
 				} 
 			}
 		}
 	}
-	
+
+
 	mouseBox->setPosition((mousePos.x-(((float)vmode.height*MULTIPLIER_RATIO)/2)), (mousePos.y - (((float)vmode.height*MULTIPLIER_RATIO)/2)));
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)){
 		typeChosen = NONE;
 		changeMouseBox(TRANSPARENT);
 	}
 	App->draw((*mouseBox));
-
-
-	
 
 	for (int i = 0; i < grid.size(); i++){
 		for (int j = 0; j < grid[i].size(); j++){

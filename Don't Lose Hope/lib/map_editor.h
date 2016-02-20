@@ -31,7 +31,7 @@ protected:
 private:
 	bool fullscreen;
 	bool clickEnable;
-	int typeChosen;
+	int typeChosen=NONE;
 	int qttObstacles=0;
 	sf::VideoMode vmode;
 	sf::RenderWindow* App;
@@ -39,9 +39,8 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
 	sf::Texture texture;
-	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
+	std::vector<sf::Vector2i> objPosition = std::vector<sf::Vector2i>(7,sf::Vector2i({-1,-1}));
 	std::vector<sf::Texture> sprites = std::vector<sf::Texture>(3);
-	sf::Vector2f housePos;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 	sf::RectangleShape toolBox;
 	sf::RectangleShape* mouseBox;
