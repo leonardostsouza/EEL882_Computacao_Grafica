@@ -336,16 +336,6 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			}
 		}
 
-		// check for player "collision" with house
-		if( getGridPos(housePos).x == getGridPos(playerObj->getNextPosition()).x &&
-			getGridPos(housePos).y == getGridPos(playerObj->position).y)
-		{
-			grid[getGridPos(housePos).x ][getGridPos(housePos).y].setTexture(&house[1]);
-			playerObj->stop();
-			playerObj->position.x = -50;
-			playerObj->position.y = -50;
-		}
-
 		// check if player is outside the grid
 		if( getGridPos(playerObj->position).x < -1 || getGridPos(playerObj->position).x > 6 ||
 			getGridPos(playerObj->position).y < -1 || getGridPos(playerObj->position).y > 7)
@@ -353,6 +343,17 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			playerObj->stop();
 			playerObj->splash();
 		}
+
+		// check for player "collision" with house
+		if( getGridPos(housePos).x == getGridPos(playerObj->getNextPosition()).x &&
+			getGridPos(housePos).y == getGridPos(playerObj->position).y)
+		{
+			grid[getGridPos(housePos).x ][getGridPos(housePos).y].setTexture(&house[1]);
+			playerObj->stop();
+			playerObj->shape.setFillColor(sf::Color(0,0,0,0));
+		}
+
+		
 
 		// move player
 		playerObj->move(playerObj->getDirection());

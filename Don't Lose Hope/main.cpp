@@ -95,7 +95,7 @@ Game* game = new Game(fs,App,vmode,menu->passLevels());
                 delete menu;
                 delete game;
                 menu = new Screen(fs,App,vmode);
-                game = new Game(fs,App,vmode);
+                game = new Game(fs,App,vmode,menu->passLevels());
             }
         }
     }
