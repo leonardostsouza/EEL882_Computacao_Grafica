@@ -40,17 +40,13 @@ public:
 	void loadTextures();
 	void loadShape(int size);
 
-	void setLevel(int i){level = i;}
-
-	void splash();
+	int splash();
 
 	sf::Vector2f getNextPosition();
 	
 	sf::RectangleShape shape; // Player shape
 
 	sf::Vector2f position; // Player position on screen
-
-	bool changeSide = false;
 protected:
 
 private:
@@ -66,8 +62,6 @@ private:
 
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;
-	int level;
-
 	
 };
 

@@ -23,7 +23,7 @@ Screen::~Screen()
 void Screen::changeMenuColor(int op, GAMESTATE localstate){
 	for (int i = 0; i < menu.size(); i++) {
 		if (op == i){
-			menu[i].setColor(sf::Color(255, 255, 0));
+			menu[i].setColor(sf::Color(255, 0, 0));
 		}
 		else
 		{
@@ -644,18 +644,14 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 					menu[index].setColor(sf::Color(0, 0, 0));
 				}
 			}
-			std::cout << "Page: " << page << std::endl;
 			menu[4].setCharacterSize(vmode.height / 12);
 			menu[4].setString("Back");
 			menu[4].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 5*(vmode.height / 12)) });
 			menu[4].setFont(font);
 			if (page > 0){
-				std::cout << "Not Here" << std::endl;
 				menu[4].setColor(sf::Color(0, 0, 0));	
 			}else{
-				std::cout << "Here" << std::endl;
 				menu[4].setColor(sf::Color(255, 0, 0, 100));
-				std::cout << "Here2" << std::endl;
 			}
 
 			menu[5].setCharacterSize(vmode.height / 12);

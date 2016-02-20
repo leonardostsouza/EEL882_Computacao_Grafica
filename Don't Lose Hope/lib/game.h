@@ -10,7 +10,6 @@
 #include <math.h>
 #include "utilities.h"
 #include "player.h"
-#include "screen.h"
 
 class Game
 {
@@ -21,6 +20,7 @@ public:
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
 
 protected:
+	void showText(int op);
 	void createBackground();
 	void createMusic();
 	bool isFullscreen();
@@ -32,17 +32,13 @@ protected:
 	sf::Vector2f getGridPos(sf::Vector2f objPosition); // return grid position from screen position
 
 private:
-	const float Speed = 100.f;
 	bool fullscreen;
 	bool enableDrawing;
-	bool changeSide = false;
 	std::vector<std::string> levels;
+	sf::Text gametext;
 	
 	bool left = true;
 	int movecounter = 0;
-	//sf::Clock ClockAnimation;
-	//sf::Clock ClockSpeed;
-	//sf::Vector2f playerPos;
 	sf::VideoMode vmode;
 	sf::RenderWindow* App;
 	sf::Sprite background;
@@ -51,13 +47,14 @@ private:
 	sf::Sound bgMusic;		
 	sf::Texture texture;
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
-	std::vector<sf::Text> menu;
 	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
 	sf::Vector2f housePos;
 	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
+
+	enum TYPETEXT {LOSE,WIN};
 
 	enum DIRECTION {STOPPED, UP, RIGHT, DOWN, LEFT};
 	int moving;

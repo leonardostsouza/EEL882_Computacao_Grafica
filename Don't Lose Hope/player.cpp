@@ -178,8 +178,7 @@ void Player::move(int moveDirection)
 	}
 
 	if (direction != STOPPED){
-		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f || changeSide == true){
-			changeSide = false;
+		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f){ 
 			if (movecounter > 3) movecounter = 0;
 			shape.setTexture(&textures[moveDirection][movecounter]);
 			movecounter++;
@@ -222,7 +221,7 @@ void Player::stop()
 	this->move(STOPPED);
 }
 
-void Player::splash()
+int Player::splash()
 { 
 	if (splashCounter < 9)
 	{
@@ -232,6 +231,9 @@ void Player::splash()
 			splashCounter++;
 			ClockAnimation.restart();
 		}
+	}else{
+		shape.setFillColor(sf::Color(0,0,0,0));
 	}
+	return splashCounter;
 	
 }

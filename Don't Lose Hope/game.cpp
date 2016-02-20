@@ -1,6 +1,6 @@
 #include "lib/game.h"
 
-Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), fullscreen (fs) , vmode (vm) , levels(maps) 
+Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), fullscreen (fs) , vmode (vm) , levels(maps)
 //Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 	//create player
@@ -107,59 +107,12 @@ void Game::createGrid()
 		for (int j = 0; j < grid[i].size(); j++){
 			grid[i][j].setSize(sf::Vector2f(((float)vmode.height*MULTIPLIER_RATIO),((float)vmode.height*MULTIPLIER_RATIO)));
 			grid[i][j].setFillColor(sf::Color::Transparent);
-			grid[i][j].setOutlineColor(sf::Color::Black);
+			grid[i][j].setOutlineColor(sf::Color(200,200,200,100));
 			grid[i][j].setOutlineThickness(1);
 			grid[i][j].setPosition(((float)vmode.width*X_RATIO)+(((float)vmode.height*MULTIPLIER_RATIO)*i),((float)vmode.width*Y_RATIO)+(j*((float)vmode.height*MULTIPLIER_RATIO)));
 		}
 	}
 }
-
-/*
-void Game::movePlayer(){
-	float ElapsedTime = ClockSpeed.getElapsedTime().asSeconds();
-	ClockSpeed.restart();
-	switch(moving){
-		case STOPPED:
-		break;
-		case UP:
-		playerPos.y -= Speed * ElapsedTime;
-		break;
-		case DOWN:
-		playerPos.y += Speed * ElapsedTime;
-		break;
-		case LEFT:
-		playerPos.x -= Speed * ElapsedTime;
-		break;
-		case RIGHT:
-		playerPos.x += Speed * ElapsedTime;
-		break;		
-		default:
-		std::cout << "Something's wrong!" << std::endl;
-	}
-
-	if (moving != STOPPED){
-		if (ClockAnimation.getElapsedTime().asSeconds() >= 0.2f || changeSide == true){
-			changeSide = false;
-			if (movecounter > 3) movecounter = 0;
-			playerObj->shape.setTexture(&playerObj->textures[moving][movecounter]);
-			movecounter++;
-			ClockAnimation.restart();
-		}
-	}
-
-	if (moving == 3){
-		for (int i = 0; i < obstaclesPos.size(); i++){
-			if (((playerPos.x >= obstaclesPos[i].x) && (playerPos.x <= (obstaclesPos[i].x + 51))) && ((playerPos.y >= obstaclesPos[i].y) && (playerPos.y <= (obstaclesPos[i].y + 51)))){
-				moving = 0;
-				movecounter = 0;
-				playerObj->shape.setTexture(&playerObj->textures[moving][movecounter]);
-				playerPos.x = obstaclesPos[i].x;
-				playerPos.y = obstaclesPos[i].y - 51;
-			}
-		}
-	}
-	playerObj->shape.setPosition(playerPos);
-}*/
 
 void Game::mapParser(std::string mapName)
 {
@@ -288,7 +241,6 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 	if (enableDrawing)
 	{
 		mapParser("resources/maps/" + levels[level]);
-		playerObj->setLevel(level);
 		enableDrawing = false;
 	}
 
@@ -302,22 +254,18 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 				if (playerObj->getDirection() != UP){
 					playerObj->setDirection(UP);
-					playerObj->changeSide = true;
 				}	
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 				if (playerObj->getDirection() != RIGHT){
 					playerObj->setDirection(RIGHT);
-					playerObj->changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 				if (playerObj->getDirection() != DOWN){					
 					playerObj->setDirection(DOWN);				
-					playerObj->changeSide = true;
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 				if (playerObj->getDirection() != LEFT){
 					playerObj->setDirection(LEFT);
-					playerObj->changeSide = true;
 				}
 			}
 		}
@@ -341,19 +289,22 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			getGridPos(playerObj->position).y < -1 || getGridPos(playerObj->position).y > 7)
 		{
 			playerObj->stop();
-			playerObj->splash();
+			if (playerObj->splash() == 9){
+				showText(LOSE);	
+			}
+			App->draw(gametext);
 		}
 
 		// check for player "collision" with house
-		if( getGridPos(housePos).x == getGridPos(playerObj->getNextPosition()).x &&
+		if( getGridPos(housePos).x == getGridPos(playerObj->position).x &&
 			getGridPos(housePos).y == getGridPos(playerObj->position).y)
 		{
 			grid[getGridPos(housePos).x ][getGridPos(housePos).y].setTexture(&house[1]);
 			playerObj->stop();
 			playerObj->shape.setFillColor(sf::Color(0,0,0,0));
+			showText(WIN);
+			App->draw(gametext);
 		}
-
-		
 
 		// move player
 		playerObj->move(playerObj->getDirection());
@@ -368,3 +319,28 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		return nextState;
 	}
+
+void Game::showText(int op){
+		if (!font.loadFromFile("resources/fonts/ingame_font.ttf")) {
+			std::cerr << "Error loading fonts" << std::endl;
+			return;
+		}
+		gametext.setCharacterSize(vmode.height / 10);
+		gametext.setFont(font);
+		gametext.setColor(sf::Color(255, 0, 0));
+		switch (op){
+			case LOSE:
+				gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height/2) - (vmode.height / 5))});
+				gametext.setString("I find your lack of\n\t\t\tHOPE \n\t\tdisturbing");
+				break;
+
+			case WIN:
+				gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height / 2) - (vmode.height / 20))});
+				gametext.setString("HOPE, YOU HAVE FOUND");
+				break;
+
+			default:
+				break;
+		}
+
+}
