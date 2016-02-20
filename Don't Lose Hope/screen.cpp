@@ -431,7 +431,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					}
 				}
 			}
-			// MAINMENU
+			// MAINMENU BUTTON
 			else if ((mousePos.y >= ((float)((vmode.height / 3) + (6*vmode.height / 12))))
 				&& (mousePos.y <= ((float)((vmode.height / 3) + (7*vmode.height / 12)))))
 			{
@@ -553,7 +553,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	}
 	App->display();
 
-	if (nextState != MAINMENU && nextState != OPTIONSMENU){
+	if (nextState == CREATING || nextState == PLAYING){
 		bgMusic.stop();
 	}
 
