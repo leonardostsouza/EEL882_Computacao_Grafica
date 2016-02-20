@@ -76,7 +76,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	}
 
 	//check mouse position on main screen
-	sf::Vector2i mousePos=sf::Mouse::getPosition(*App);
+	mousePos=sf::Mouse::getPosition(*App);
 	sf::RectangleShape highlight;
 	highlight.setSize(sf::Vector2f((vmode.width / 3.1), (vmode.height / 12)));
 	highlight.setFillColor(sf::Color(0, 102, 204, 90));
@@ -141,7 +141,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					}						
 				}
 			}
-			// SCENARIO CREATING
+			// MAP EDITOR
 			else if ((mousePos.y >= ((float)((vmode.height / 3) + (3*vmode.height / 12))))
 				&& (mousePos.y <= ((float)((vmode.height / 3) + (4*vmode.height / 12)))))
 			{
@@ -606,7 +606,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 			menu[1].setFont(font);
 			menu[1].setColor(sf::Color(0, 0, 0));
 			menu[2].setCharacterSize(vmode.height / 12);
-			menu[2].setString("Create Scenario");
+			menu[2].setString("Map Editor");
 			menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.height / 12)) });
 			menu[2].setFont(font);
 			menu[2].setColor(sf::Color(0, 0, 0));

@@ -50,6 +50,7 @@ private:
 	std::vector<std::string> levels;
 	bool clickEnable;
 	int chosenlevel = 0;
+	sf::Vector2i mousePos;
 };
 
 #endif

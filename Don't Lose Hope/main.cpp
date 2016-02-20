@@ -105,8 +105,10 @@ while (App->isOpen())
                 fs = !fs;
                 delete menu;
                 delete game;
+                delete map_editor;
                 menu = new Screen(fs,App,vmode);
                 game = new Game(fs,App,vmode,menu->passLevels());
+                map_editor = new MapEditor(fs,App,vmode);
             }
         }
     }
