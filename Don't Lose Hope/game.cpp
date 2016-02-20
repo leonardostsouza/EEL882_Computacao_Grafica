@@ -27,9 +27,9 @@ Game::~Game()
 void Game::loadTextures()
 {
 	// Obstacles textures
-	if(!obstacles[0].loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
+	if(!obstacle.loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
 		std::cerr << "Error loading sprites" << std::endl;
-
+/*
 	if(!obstacles[1].loadFromFile("resources/images/sprites.png", sf::IntRect(2,180,44,42)))
 		std::cerr << "Error loading sprites" << std::endl;
 
@@ -41,7 +41,7 @@ void Game::loadTextures()
 
 	if(!obstacles[4].loadFromFile("resources/images/sprites.png", sf::IntRect(6,487,47,40)))
 		std::cerr << "Error loading sprites" << std::endl;
-
+*/
 	// House Textures
 	if(!house[0].loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
 		std::cerr << "Error loading sprites" << std::endl;
@@ -120,7 +120,7 @@ void Game::mapParser(std::string mapName)
 	int spriteX, spriteY;
 	int obs = 0;
 
-	enum SPRITETYPE {PLAYER, HOUSE, O1, O2, O3, O4};
+	enum SPRITETYPE {PLAYER, HOUSE, OBST};//1, O2, O3, O4};
 
 	SPRITETYPE spriteType = PLAYER;
 
@@ -176,10 +176,10 @@ void Game::mapParser(std::string mapName)
 
 							switch (spriteType)
 							{
-								case O1:
-									grid[spriteX][spriteY].setTexture(&obstacles[0]);
+								case OBST:
+									grid[spriteX][spriteY].setTexture(&obstacle);
 									break;
-								case O2:
+								/*case O2:
 									grid[spriteX][spriteY].setTexture(&obstacles[1]);
 									break;
 								case O3:
@@ -187,10 +187,10 @@ void Game::mapParser(std::string mapName)
 									break;
 								case O4:
 									grid[spriteX][spriteY].setTexture(&obstacles[3]);
-									break;
+									break;*/
 								case HOUSE:
 									grid[spriteX][spriteY].setTexture(&house[0]);
-									spriteType = O1;
+									spriteType = OBST;
 									break;
 								case PLAYER:								
 									//Setting the playershape

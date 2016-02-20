@@ -36,10 +36,12 @@ private:
 	sf::Sound bgMusic;		
 	sf::Texture texture;
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
-	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
+	sf::Texture obstacle;
 	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
 	sf::Vector2f housePos;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
+	sf::RectangleShape toolBox;
+	std::vector<sf::RectangleShape> tools = std::vector<sf::RectangleShape>(3);
 };
 
 #endif

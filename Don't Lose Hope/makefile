@@ -21,6 +21,7 @@ default: $(SOURCE_FILES)
 	g++ -std=c++11 -c map_editor.cpp -o $(MAP_EDITOR_OBJ)
 	g++ -std=c++11 -c main.cpp -o $(MAIN_OBJ)
 	g++ -std=c++11 -o $(EXEC_FILE) $(MAIN_OBJ) $(SCREEN_OBJ) $(GAME_OBJ) $(PLAYER_OBJ) $(MAP_EDITOR_OBJ) $(SFML_FLAGS)
+	./DLH
 
 debug-mode: $(SOURCE_FILES)
 	g++ -std=c++11 -Wall -DDEBUG -O0 -c game.cpp -o $(GAME_OBJ)

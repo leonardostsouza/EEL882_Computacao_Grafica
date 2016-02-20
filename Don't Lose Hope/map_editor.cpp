@@ -23,19 +23,7 @@ MapEditor::~MapEditor()
 void MapEditor::loadTextures()
 {
 	// Obstacles textures
-	if(!obstacles[0].loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[1].loadFromFile("resources/images/sprites.png", sf::IntRect(2,180,44,42)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[2].loadFromFile("resources/images/sprites.png", sf::IntRect(84,130,42,40)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[3].loadFromFile("resources/images/sprites.png", sf::IntRect(0,320,47,44)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[4].loadFromFile("resources/images/sprites.png", sf::IntRect(6,487,47,40)))
+	if(!obstacle.loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
 		std::cerr << "Error loading sprites" << std::endl;
 
 	// House Textures
@@ -61,6 +49,10 @@ void MapEditor::createBackground()
 		background.scale(((float)vmode.width*1.2) / (float)texture.getSize().x, (float)vmode.height / (float)texture.getSize().y);
 		background.setPosition(-(float)vmode.width*1/8,0);
 	}
+
+	toolBox.setSize(sf::Vector2f((vmode.width / 5), (vmode.height / 2)));
+	toolBox.setPosition(0, 0);
+	toolBox.setFillColor(sf::Color(0, 102, 204, 90));
 }
 
 void MapEditor::createMusic() 
@@ -114,6 +106,7 @@ GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled)
 
 	App->clear();
 	App->draw(background);
+	App->draw(toolBox);
 
 	GAMESTATE nextState = CREATING;
 
@@ -132,6 +125,7 @@ GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled)
 		if (nextState != CREATING){
 			bgMusic.stop();
 		}
+
 
 		return nextState;
 	}

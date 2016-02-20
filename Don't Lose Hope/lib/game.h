@@ -47,7 +47,8 @@ private:
 	sf::Sound bgMusic;		
 	sf::Texture texture;
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
-	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
+//	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
+	sf::Texture obstacle;
 	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
 	sf::Vector2f housePos;
