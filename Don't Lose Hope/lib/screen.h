@@ -34,6 +34,7 @@ protected:
 	void setFullscreen(bool fs);
 
 private:
+	bool levelsloaded = false;
 	bool fullscreen;
 	bool soundEnabled;
 	int page=0;

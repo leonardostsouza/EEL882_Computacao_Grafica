@@ -13,6 +13,9 @@ MapEditor::MapEditor(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd)
 
 // Creating the music
 	createMusic();	
+
+// Creating the text
+	setText();
 }
 
 
@@ -70,6 +73,25 @@ void MapEditor::createBackground()
 	tools[0].setTexture(&sprites[0]);
 	tools[1].setTexture(&sprites[1]);
 	tools[2].setTexture(&sprites[2]);
+
+}
+
+void MapEditor::setText(){
+	if (!font.loadFromFile("resources/fonts/map_editor_font.ttf")) {
+		std::cerr << "Error loading fonts" << std::endl;
+		return;
+	}
+	message.setCharacterSize(vmode.height/26);
+	message.setPosition(vmode.width/10,vmode.height-vmode.height/10);
+	message.setFont(font);
+	message.setColor(sf::Color(255, 0, 0));
+	message.setString("Press RCTRL + H for Help");
+}
+
+void MapEditor::showMessage(std::string txt, float pos){
+	message.setPosition(vmode.width/10,pos);
+	message.setString(txt);
+	counterTime = 0;
 }
 
 void MapEditor::createMusic() 
@@ -95,8 +117,22 @@ void MapEditor::setFullscreen(bool fs)
 	this->fullscreen = fs;
 }
 
-void MapEditor::mapWriter(){
-
+bool MapEditor::mapWriter(){
+	if (objPosition[0] != sf::Vector2i({-1,-1}) && objPosition[1] != sf::Vector2i({-1,-1})){
+	std::ofstream map("resources/maps/" + savename);
+	if(map.is_open()){
+		map << "#Map Created by Don't Lose Hope Editor" << std::endl;
+		map << "#|PLAYER_POSITION|HOUSE_POSITION|OBSTACLE1|OBSTACLE2|OBSTACLE3|OBSTACLE4|OBSTACLE5|" << std::endl;
+		for (int i = 0; i< objPosition.size(); i++){
+			map << "|" << objPosition[i].x << "," << objPosition[i].y;
+		}
+		map << "|" << std::endl;
+	}
+	map.close();
+	return true;
+	}else{
+		return false;
+	}
 }
 
 void MapEditor::changeMouseBox(int type, sf::Texture* txt){
@@ -110,6 +146,24 @@ void MapEditor::changeMouseBox(int type, sf::Texture* txt){
 		mouseBox->setFillColor(sf::Color::Transparent);
 	}
 
+}
+
+void MapEditor::delFromGrid(){
+	clickCoord = getGridPos(mousePos);
+	for (int i = 0; i< objPosition.size(); i++){
+		if ((objPosition[i].x == clickCoord.x) && (objPosition[i].y == clickCoord.y)){
+			objPosition[i] = sf::Vector2i({-1,-1});
+			if (i >= 2){
+				objPosition[i] = sf::Vector2i({-1,-1});
+				for (int j = i; j < objPosition.size()-1; j++){
+					objPosition[j] = objPosition[j+1];
+				}
+				qttObstacles--;
+			}
+			grid[clickCoord.x][clickCoord.y].setTexture(NULL);
+			grid[clickCoord.x][clickCoord.y].setFillColor(sf::Color::Transparent);
+		}
+	}
 }
 
 void MapEditor::createGrid()
@@ -132,7 +186,7 @@ sf::Vector2i MapEditor::getGridPos(sf::Vector2i objPosition){
 	return pos;
 }
 
-GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled) 
+GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEnabled) 
 {
 // Play background music
 	if (isSoundEnabled)
@@ -150,119 +204,171 @@ GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled)
 		App->draw(tools[i]);
 	}
 
-	mousePos=sf::Mouse::getPosition(*App);
-
 	GAMESTATE nextState = CREATING;
-	if ((mousePos.x >= 20+toolBox.getSize().x/7) && (mousePos.x <= (20+toolBox.getSize().x/7 + ((float)vmode.height*MULTIPLIER_RATIO)))){
-		if ((mousePos.y >= (vmode.height/3.1)) && (mousePos.y <= (vmode.height/3.1)+((float)vmode.height*MULTIPLIER_RATIO))){
-			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-				clickEnable = true;
-			}
 
-			if (clickEnable)
-			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{	
-					if (objPosition[0] == sf::Vector2i({-1,-1})){
-						changeMouseBox(WHITE,&sprites[0]);
-						typeChosen = PLAYER;
-						clickEnable = false;
-					}
-				}						
-			}
-		}
-		else if ((mousePos.y >= (vmode.height/3.1)+20+((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+20+2*((float)vmode.height*MULTIPLIER_RATIO))) {
-			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-				clickEnable = true;
-			}
+	if (!savestate){
+		mousePos=sf::Mouse::getPosition(*App);
 
-			if (clickEnable)
-			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+		if ((mousePos.x >= 20+toolBox.getSize().x/7) && (mousePos.x <= (20+toolBox.getSize().x/7 + ((float)vmode.height*MULTIPLIER_RATIO)))){
+			if ((mousePos.y >= (vmode.height/3.1)) && (mousePos.y <= (vmode.height/3.1)+((float)vmode.height*MULTIPLIER_RATIO))){
+				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					clickEnable = true;
+				}
+
+				if (clickEnable)
 				{
-					if (objPosition[1] == sf::Vector2i({-1,-1})){
-						changeMouseBox(WHITE,&sprites[1]);
-						typeChosen = HOUSE;
-						clickEnable = false;
-					}
-				}						
-			}
-		}
-		else if ((mousePos.y >= (vmode.height/3.1)+40+2*((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+40+3*((float)vmode.height*MULTIPLIER_RATIO))) {
-			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-				clickEnable = true;
-			}
-
-			if (clickEnable)
-			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					if (objPosition[qttObstacles+2] == sf::Vector2i({-1,-1}) && qttObstacles < 5){
-						changeMouseBox(WHITE,&sprites[2]);
-						typeChosen = OBSTACLE;
-						clickEnable = false;
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{	
+						if (objPosition[0] == sf::Vector2i({-1,-1})){
+							changeMouseBox(WHITE,&sprites[0]);
+							typeChosen = PLAYER;
+							clickEnable = false;
+						}
 					}						
 				}
 			}
-		}
-	}else{
-		if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			clickEnable = true;
-		}
-		if (clickEnable){
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-				clickEnable = false;
+			else if ((mousePos.y >= (vmode.height/3.1)+20+((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+20+2*((float)vmode.height*MULTIPLIER_RATIO))) {
+				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					clickEnable = true;
+				}
 
-				if (typeChosen != NONE){
-					clickCoord = getGridPos(mousePos);
-
-					if((clickCoord.x >= 0 && clickCoord.x < 7) && (clickCoord.y >= 0 && clickCoord.y < 7)){
-						if (grid[clickCoord.x][clickCoord.y].getTexture() == NULL){
-							grid[clickCoord.x][clickCoord.y].setFillColor(sf::Color::White);
-							grid[clickCoord.x][clickCoord.y].setTexture(&sprites[typeChosen-1]);
-
-							switch(typeChosen){
-
-								case PLAYER:
-								objPosition[0] = sf::Vector2i({clickCoord.x,clickCoord.y});
-								break;
-
-								case HOUSE:
-								objPosition[1] = sf::Vector2i({clickCoord.x,clickCoord.y});
-								break;
-
-								case OBSTACLE:
-								objPosition[qttObstacles+2] = sf::Vector2i({clickCoord.x,clickCoord.y});
-								qttObstacles++;
-								break;
-
-								default:
-								break;
-							}
-
-							if ((typeChosen != NONE && typeChosen != OBSTACLE) || (typeChosen == OBSTACLE && qttObstacles > 4)){
-								typeChosen = NONE;
-								changeMouseBox(TRANSPARENT);
-							}
+				if (clickEnable)
+				{
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{
+						if (objPosition[1] == sf::Vector2i({-1,-1})){
+							changeMouseBox(WHITE,&sprites[1]);
+							typeChosen = HOUSE;
+							clickEnable = false;
 						}
+					}						
+				}
+			}
+			else if ((mousePos.y >= (vmode.height/3.1)+40+2*((float)vmode.height*MULTIPLIER_RATIO)) && (mousePos.y <= (vmode.height/3.1)+40+3*((float)vmode.height*MULTIPLIER_RATIO))) {
+				if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					clickEnable = true;
+				}
 
-						for (int i = 0; i< objPosition.size(); i++){
-							std::cout << i << " | X: " << objPosition[i].x << " | Y: " << objPosition[i].y << std::endl;
-						}
-						std::cout << typeChosen << std::endl;
+				if (clickEnable)
+				{
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					{
+						if (objPosition[qttObstacles+2] == sf::Vector2i({-1,-1}) && qttObstacles < 5){
+							changeMouseBox(WHITE,&sprites[2]);
+							typeChosen = OBSTACLE;
+							clickEnable = false;
+						}						
 					}
-				} 
+				}
+			}
+		}else{
+			if(!sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+				clickEnable = true;
+			}
+			if (clickEnable){
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+					clickEnable = false;
+
+					if (typeChosen != NONE){
+						clickCoord = getGridPos(mousePos);
+
+						if((clickCoord.x >= 0 && clickCoord.x < 7) && (clickCoord.y >= 0 && clickCoord.y < 7)){
+							if (grid[clickCoord.x][clickCoord.y].getTexture() == NULL){
+								grid[clickCoord.x][clickCoord.y].setFillColor(sf::Color::White);
+								grid[clickCoord.x][clickCoord.y].setTexture(&sprites[typeChosen-1]);
+
+								switch(typeChosen){
+
+									case PLAYER:
+									objPosition[0] = sf::Vector2i({clickCoord.x,clickCoord.y});
+									break;
+
+									case HOUSE:
+									objPosition[1] = sf::Vector2i({clickCoord.x,clickCoord.y});
+									break;
+
+									case OBSTACLE:
+									objPosition[qttObstacles+2] = sf::Vector2i({clickCoord.x,clickCoord.y});
+									qttObstacles++;
+									break;
+
+									default:
+									break;
+								}
+
+								if ((typeChosen != NONE && typeChosen != OBSTACLE) || (typeChosen == OBSTACLE && qttObstacles > 4)){
+									typeChosen = NONE;
+									changeMouseBox(TRANSPARENT);
+								}
+							}
+						}
+					} 
+				}
 			}
 		}
-	}
+
+		mouseBox->setPosition((mousePos.x-(((float)vmode.height*MULTIPLIER_RATIO)/2)), (mousePos.y - (((float)vmode.height*MULTIPLIER_RATIO)/2)));
+		if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+			keyPressEnable = true;
+		}
 
 
-	mouseBox->setPosition((mousePos.x-(((float)vmode.height*MULTIPLIER_RATIO)/2)), (mousePos.y - (((float)vmode.height*MULTIPLIER_RATIO)/2)));
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)){
-		typeChosen = NONE;
-		changeMouseBox(TRANSPARENT);
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Delete) && keyPressEnable == true){
+			keyPressEnable = false;
+			delFromGrid();
+		}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && keyPressEnable == true){
+			keyPressEnable = false;
+			if (typeChosen == NONE){
+				nextState = MAINMENU;
+			}else{
+				typeChosen = NONE;
+				changeMouseBox(TRANSPARENT);
+			}
+		}else if((sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && keyPressEnable == true){
+			keyPressEnable = false;
+			savestate = true;
+			showMessage("File Name: ",vmode.height-vmode.height/10);
+		}else if((sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) && sf::Keyboard::isKeyPressed(sf::Keyboard::H) && keyPressEnable == true){
+			showMessage("Select a cartoon and put it over the grid\nPress Control + S to save. Press ESC to cancel or quit\nPress Delete with the mouse over a cartoon to delete",vmode.height-vmode.height/4);
+		}
+		counterTime++;
+
+		if (counterTime < 200){
+			App->draw(message);
+		}
+		App->draw((*mouseBox));
+
+	}else{
+		//showMessage("Name:",vmode.height-vmode.height/10);
+		if (event.type == sf::Event::TextEntered && keyPressEnable){
+			keyPressEnable = false;
+			std::cout << event.key.code << std::endl;
+			if(event.text.unicode == 8){
+				if (savename.size()>0){
+					savename.resize(savename.size()-1);
+					showMessage("File Name: " + savename,vmode.height-vmode.height/10);
+				}
+			}else if(event.text.unicode == 13){
+				showMessage("",vmode.height-vmode.height/10);
+				if(!mapWriter()){
+					showMessage("At least a player and a house are needed",vmode.height-vmode.height/10);
+					savename = "";
+				}else{
+					showMessage("Saved",vmode.height-vmode.height/10);
+				}
+				savestate = false;
+			}else if ((event.text.unicode > 47 && event.text.unicode < 58) || (event.text.unicode > 96 && event.text.unicode < 123) || (event.text.unicode > 64 && event.text.unicode < 91)){
+					savename+= static_cast<char>(event.text.unicode);
+					showMessage("File Name: " + savename,vmode.height-vmode.height/10);
+			}
+		}else if(event.type == sf::Event::KeyReleased){
+			keyPressEnable = true;
+		}
+		//mapWriter();
+		App->draw(message);
 	}
-	App->draw((*mouseBox));
+
 
 	for (int i = 0; i < grid.size(); i++){
 		for (int j = 0; j < grid[i].size(); j++){
@@ -270,18 +376,12 @@ GAMESTATE MapEditor::eventHandler(bool isFullscreen, bool isSoundEnabled)
 		}
 	}
 
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		nextState = MAINMENU;
-	}
-
 	App->display();
 
-// Stop music if exiting PLAYING state
+	// Stop music if exiting PLAYING state
 	if (nextState != CREATING){
 		bgMusic.stop();
 	}
-
 
 	return nextState;
 }

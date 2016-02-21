@@ -24,24 +24,40 @@ Game::~Game()
 {
 }
 
+bool Game::saveGame(){
+	std::ofstream map("resources/saves/savegame");
+	if(map.is_open()){
+		sf::Vector2i obPos;
+		sf::Vector2i playerPos = (sf::Vector2i)getGridPos(playerObj->position);
+		sf::Vector2i houseP = (sf::Vector2i)getGridPos(housePos);
+		map << "#Map Created by Don't Lose Hope Editor" << std::endl;
+		map << "#|PLAYER_POSITION|HOUSE_POSITION|OBSTACLE1|OBSTACLE2|OBSTACLE3|OBSTACLE4|OBSTACLE5|" << std::endl;
+		map << "|" << playerPos.x << "," << playerPos.y;
+		map << "|" << houseP.x << "," << houseP.y;
+		for (int i = 0; i < obstaclesPos.size(); i++){
+			obPos = (sf::Vector2i)getGridPos(obstaclesPos[i]);
+			map << "|" << obPos.x << "," << obPos.y;
+		}
+		map << "|" << std::endl;
+	map.close();
+	return true;
+	}else{
+		return false;
+	}
+}
+
+GAMESTATE Game::loadGame(){
+	mapParser("resources/saves/savegame");
+	enableDrawing = false;
+	return PLAYING;
+}
+
 void Game::loadTextures()
 {
 	// Obstacles textures
 	if(!obstacle.loadFromFile("resources/images/sprites.png", sf::IntRect(531,545,33,34)))
 		std::cerr << "Error loading sprites" << std::endl;
-/*
-	if(!obstacles[1].loadFromFile("resources/images/sprites.png", sf::IntRect(2,180,44,42)))
-		std::cerr << "Error loading sprites" << std::endl;
 
-	if(!obstacles[2].loadFromFile("resources/images/sprites.png", sf::IntRect(84,130,42,40)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[3].loadFromFile("resources/images/sprites.png", sf::IntRect(0,320,47,44)))
-		std::cerr << "Error loading sprites" << std::endl;
-
-	if(!obstacles[4].loadFromFile("resources/images/sprites.png", sf::IntRect(6,487,47,40)))
-		std::cerr << "Error loading sprites" << std::endl;
-*/
 	// House Textures
 	if(!house[0].loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
 		std::cerr << "Error loading sprites" << std::endl;
@@ -221,8 +237,6 @@ void Game::mapParser(std::string mapName)
 	}
 }
 
-
-
 GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level) 
 {
 	// Play background music
@@ -267,7 +281,11 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 				if (playerObj->getDirection() != LEFT){
 					playerObj->setDirection(LEFT);
 				}
-			}
+			}else if((sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+				if (saveGame()){
+					showText(SAVED);
+				}
+			}				
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 			playerObj->stop();
@@ -292,7 +310,6 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if (playerObj->splash() == 9){
 				showText(LOSE);	
 			}
-			App->draw(gametext);
 		}
 
 		// check for player "collision" with house
@@ -303,12 +320,19 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			playerObj->stop();
 			playerObj->shape.setFillColor(sf::Color(0,0,0,0));
 			showText(WIN);
-			App->draw(gametext);
 		}
 
 		// move player
 		playerObj->move(playerObj->getDirection());
 		App->draw(playerObj->shape);
+
+		counterTime++;
+		std::cout << counterTime << std::endl;
+
+		if (counterTime < 200){
+			App->draw(gametext);
+		}
+
 		App->display();
 
 		// Stop music if exiting PLAYING state
@@ -325,6 +349,7 @@ void Game::showText(int op){
 			std::cerr << "Error loading fonts" << std::endl;
 			return;
 		}
+		counterTime = 0;
 		gametext.setCharacterSize(vmode.height / 10);
 		gametext.setFont(font);
 		gametext.setColor(sf::Color(255, 0, 0));
@@ -337,6 +362,15 @@ void Game::showText(int op){
 			case WIN:
 				gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height / 2) - (vmode.height / 20))});
 				gametext.setString("HOPE, YOU HAVE FOUND");
+				break;
+
+			case SAVED:
+				std::cout << __LINE__ << std::endl;
+				gametext.setCharacterSize(vmode.height/26);
+				gametext.setPosition(vmode.width/10,vmode.height-vmode.height/10);
+				//gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height/2) - (vmode.height / 5))});
+				gametext.setString("Saved");
+				std::cout << __LINE__ << std::endl;
 				break;
 
 			default:

@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     sf::View view(App->getDefaultView());
     App->setFramerateLimit(60);
     App->setVerticalSyncEnabled(true);
-    Screen* menu = new Screen(fs,App,vmode);
+    Screen* menu = NULL; //new Screen(fs,App,vmode);
     Game* game = NULL;// = new Game(fs,App,vmode,menu->passLevels());
-    MapEditor* map_editor = new MapEditor(fs,App,vmode);
+    MapEditor* map_editor = NULL;// new MapEditor(fs,App,vmode);
 
 // check all the window's events that were triggered since the last iteration of the loop
 while (App->isOpen())
@@ -60,7 +60,15 @@ while (App->isOpen())
             delete game;
             game = NULL;
         }
-        //std::cout << __LINE__ << std::endl;
+
+        if(map_editor != NULL){
+            delete map_editor;
+            map_editor = NULL;
+        }
+
+        if (menu == NULL){
+            menu = new Screen(fs,App,vmode);
+        }
         state = menu->eventHandler(state);
         break;
 
@@ -72,9 +80,19 @@ while (App->isOpen())
         state = menu->eventHandler(state);
         break;
 
-        case CREATING:
-        state = map_editor->eventHandler(menu->isFullscreen(), menu->isSoundEnabled());
+        case CONTINUE:
+        if (game == NULL){
+            game = new Game(fs,App,vmode,menu->passLevels());
+        }
+        state = game->loadGame();
         break;
+
+        case CREATING:
+            if (map_editor == NULL){
+                map_editor = new MapEditor(fs,App,vmode);
+            }
+            state = map_editor->eventHandler(event,menu->isFullscreen(), menu->isSoundEnabled());
+            break;
 
         case PLAYING:
         if (game == NULL){
@@ -91,7 +109,6 @@ while (App->isOpen())
         state = MAINMENU;
     }
 
-    //prevState = state;
 //close window event
     while(App->pollEvent(event)){
         if (event.type == sf::Event::Closed)

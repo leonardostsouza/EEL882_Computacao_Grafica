@@ -31,16 +31,19 @@ void Screen::changeMenuColor(int op, GAMESTATE localstate){
 		}
 	}
 	if (localstate == CHOOSING){
-		if (page > 0){
-			menu[5].setColor(sf::Color(0, 0, 0,100));
+		//BACK
+		if (page == 0){
+			menu[4].setColor(sf::Color(0, 0, 0,100));
 		}
-		if (levels.size() > (page+1)*4){
-			menu[4].setColor(sf::Color(0, 0, 0,100));	
+		//NEXT
+		if (levels.size() < (page+1)*4){
+			menu[5].setColor(sf::Color(0, 0, 0,100));	
 		}
 	}
 }
 
 void Screen::loadLevels(){
+	levels.clear();
 	levels.resize(20);
 	struct dirent *de;
 	DIR *dir = opendir("resources/maps");
@@ -59,6 +62,7 @@ void Screen::loadLevels(){
 	levels.shrink_to_fit();
 	std::sort(levels.begin(),levels.end());
 	closedir(dir);
+	levelsloaded = true;
 }
 
 GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
@@ -109,6 +113,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						change = true;
 						clickEnable = false;
 						nextState = CHOOSING;
+						levelsloaded = false;
 						#ifdef DEBUG	                  
 						std::cout << "DEBUG === GAMESTATE = \"CHOOSING\"" << std::endl;            
 	                    #endif
@@ -135,6 +140,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 					{
 						change = true;
 						clickEnable = false;
+						nextState = CONTINUE;
 						#ifdef DEBUG	                  
 						std::cout << "DEBUG === GAMESTATE = \"CONTINUE\"" << std::endl;            
 	                    #endif
@@ -227,6 +233,9 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	}
 	else if (localstate == CHOOSING){
 		nextState = CHOOSING;
+		if (!levelsloaded){
+			loadLevels();
+		}
 		// Menu Options mousover and clicking Handling
 		//std::cout << "X: " << vmode.width << " |Y: " << vmode.height << std::endl;
 		if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
