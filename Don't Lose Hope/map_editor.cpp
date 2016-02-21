@@ -77,7 +77,7 @@ void MapEditor::createBackground()
 }
 
 void MapEditor::setText(){
-	if (!font.loadFromFile("resources/fonts/map_editor_font.ttf")) {
+	if (!font.loadFromFile("resources/fonts/message_font.ttf")) {
 		std::cerr << "Error loading fonts" << std::endl;
 		return;
 	}
@@ -85,7 +85,7 @@ void MapEditor::setText(){
 	message.setPosition(vmode.width/10,vmode.height-vmode.height/10);
 	message.setFont(font);
 	message.setColor(sf::Color(255, 0, 0));
-	message.setString("Press RCTRL + H for Help");
+	message.setString("Doubts? Any doubts? Questions? Press CTRL + H for Help");
 }
 
 void MapEditor::showMessage(std::string txt, float pos){

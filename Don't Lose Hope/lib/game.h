@@ -28,7 +28,10 @@ protected:
 	void setFullscreen(bool fs);
 	void createGrid();
 	void loadTextures();
+	void loadMessages();
 	void movePlayer();
+
+	void showMessage(std::string str);
 
 	bool mapParser(std::string mapFile);
 	bool saveGame();
@@ -41,12 +44,12 @@ private:
 	sf::Text gametext;
 	int state;
 	bool left = true;
-	sf::Clock ClockSpeed;
 	int movecounter = 0;
 	sf::VideoMode vmode;
 	sf::RenderWindow* App;
 	sf::Sprite background;
 	sf::Font font;
+	sf::Font messageFont;
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
 	sf::Texture texture;
@@ -58,6 +61,10 @@ private:
 	sf::Vector2f housePos;
 	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
+
+	sf::Clock ClockSpeed;
+	sf::Text message;
+	sf::RectangleShape messageBox;
 
 	enum TYPETEXT {NOTHING,LOSE,WIN,SAVED};
 

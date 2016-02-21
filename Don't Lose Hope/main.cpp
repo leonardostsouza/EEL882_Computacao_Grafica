@@ -90,7 +90,7 @@ while (App->isOpen())
         else
         {
             state = MAINMENU;
-            menu->showMessage("No Save Game Found");//,vmode.height-vmode.height/4);
+            menu->showMessage("No Save Game Found");
         }
         break;
 

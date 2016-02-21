@@ -17,11 +17,27 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::str
 
 	// Creating the music
 	createMusic();	
+
+	// Define message standards
+	loadMessages();
 }
 
 
 Game::~Game()
 {
+}
+
+void Game::loadMessages(){
+	message.setString("");
+	message.setCharacterSize(vmode.height/22);
+	message.setPosition(vmode.width/3,vmode.height-vmode.height/12);
+	message.setFont(messageFont);
+	message.setColor(sf::Color(255, 0, 0));
+	message.setStyle(sf::Text::Bold);
+
+	messageBox.setPosition(vmode.width/5.0,vmode.height-vmode.height/12);
+	messageBox.setSize(sf::Vector2f((3*vmode.width / 5.0), (vmode.height / 15)));
+	messageBox.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 bool Game::saveGame(){
@@ -45,6 +61,14 @@ bool Game::saveGame(){
 		return false;
 	}
 }
+
+void Game::showMessage(std::string str)
+{
+	message.setString(str);
+	messageBox.setFillColor(sf::Color(0, 102, 204, 90));
+	//ClockSpeed.restart();
+}
+
 
 bool Game::loadGame(std::string mapName = "resources/saves/savegame"){
 	enableDrawing = false;
@@ -325,8 +349,12 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 		playerObj->move(playerObj->getDirection());
 		App->draw(playerObj->shape);
 
+		App->draw(gametext);
+
 		if (ClockSpeed.getElapsedTime().asSeconds() < 5){
-			App->draw(gametext);
+			showMessage("TESTE");
+			App->draw(messageBox);
+			App->draw(message);	
 		}
 
 		App->display();
@@ -360,12 +388,10 @@ void Game::showText(int op){
 				break;
 
 			case SAVED:
-				std::cout << __LINE__ << std::endl;
 				gametext.setCharacterSize(vmode.height/26);
 				gametext.setPosition(vmode.width/10,vmode.height-vmode.height/10);
 				//gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height/2) - (vmode.height / 5))});
 				gametext.setString("Saved");
-				std::cout << __LINE__ << std::endl;
 				break;
 
 			default:

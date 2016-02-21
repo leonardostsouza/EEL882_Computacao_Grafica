@@ -65,8 +65,8 @@ void Screen::loadFonts(){
 	}
 }
 
-void Screen::showMessage(std::string txt){// float pos){
-	//message.setPosition(vmode.width/10,pos);
+void Screen::showMessage(std::string txt)
+{
 	message.setString(txt);
 	messageBox.setFillColor(sf::Color(0, 102, 204, 90));
 	ClockSpeed.restart();
@@ -101,7 +101,6 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	createMenu(localstate,change);
 	change = false;
 	GAMESTATE nextState;
-
 	if (isSoundEnabled()){
 		if (bgMusic.getStatus() != sf::SoundSource::Status::Playing)
 		{
@@ -114,14 +113,12 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	sf::RectangleShape highlight;
 	highlight.setSize(sf::Vector2f((vmode.width / 3.1), (vmode.height / 12)));
 	highlight.setFillColor(sf::Color(0, 102, 204, 90));
-
 	// MAIN MENU SCREEN
 	if (localstate == MAINMENU)
 	{
 		nextState = MAINMENU;
 
 		// Menu Options mousover and clicking Handling
-		//std::cout << "X: " << vmode.width << " |Y: " << vmode.height << std::endl;
 		if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
 		{
 			// NEW GAME
@@ -155,6 +152,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 			else if ((mousePos.y >= ((float)((vmode.height / 3) + (2*vmode.height / 12))))
 				&& (mousePos.y <= ((float)((vmode.height / 3) + (3*vmode.height / 12)))))
 			{
+				
 				changeMenuColor(1,localstate);
 				highlight.setSize(sf::Vector2f((vmode.width / 3.5), (vmode.height / 12)));
 				highlight.setPosition((vmode.width / 3), ((vmode.height / 3) + (2*vmode.height / 12) + (vmode.height / 64)));
@@ -171,7 +169,8 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						change = true;
 						clickEnable = false;
 						nextState = CONTINUE;
-					}						
+					}		
+									
 				}
 			}
 			// MAP EDITOR
@@ -581,19 +580,24 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	}
 
 	if (ClockSpeed.getElapsedTime().asSeconds() < 5) {
+		
 		App->draw(messageBox);
+		
 		App->draw(message);			
+		
 	}
 
 	for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
+		
 		App->draw(*op);
+		
 	}
+	
 	App->display();
 
 	if (nextState != MAINMENU && nextState != OPTIONSMENU && nextState != CHOOSING){
 		bgMusic.stop();
 	}
-
 	return nextState;
 }
 
