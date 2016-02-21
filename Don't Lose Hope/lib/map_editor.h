@@ -49,7 +49,7 @@ private:
 	sf::Texture texture;
 	sf::Text message;
 	sf::Font font;
-	std::vector<sf::Vector2i> objPosition = std::vector<sf::Vector2i>(7,sf::Vector2i({-1,-1}));
+	std::vector<sf::Vector2i> objPosition = std::vector<sf::Vector2i>(MAX_OBSTACLES + 2,sf::Vector2i({-1,-1}));
 	std::vector<sf::Texture> sprites = std::vector<sf::Texture>(3);
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 	sf::RectangleShape toolBox;

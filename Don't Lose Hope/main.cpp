@@ -84,7 +84,14 @@ while (App->isOpen())
         if (game == NULL){
             game = new Game(fs,App,vmode,menu->passLevels());
         }
-        state = game->loadGame();
+        if (game->loadGame("resources/saves/savegame")){
+            state = PLAYING;
+        }
+        else
+        {
+            state = MAINMENU;
+            menu->showMessage("No Save Game Found");//,vmode.height-vmode.height/4);
+        }
         break;
 
         case CREATING:

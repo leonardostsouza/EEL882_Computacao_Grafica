@@ -46,10 +46,9 @@ bool Game::saveGame(){
 	}
 }
 
-GAMESTATE Game::loadGame(){
-	mapParser("resources/saves/savegame");
+bool Game::loadGame(std::string mapName = "resources/saves/savegame"){
 	enableDrawing = false;
-	return PLAYING;
+	return mapParser(mapName);
 }
 
 void Game::loadTextures()
@@ -59,7 +58,7 @@ void Game::loadTextures()
 		std::cerr << "Error loading sprites" << std::endl;
 
 	// House Textures
-	if(!house[0].loadFromFile("resources/images/sprites.png", sf::IntRect(152,26,78,67)))
+	if(!house[0].loadFromFile("resources/images/sprites.png", sf::IntRect(152,24,78,67)))
 		std::cerr << "Error loading sprites" << std::endl;
 
 	if(!house[1].loadFromFile("resources/images/sprites.png", sf::IntRect(258,26,78,67)))
@@ -130,14 +129,14 @@ void Game::createGrid()
 	}
 }
 
-void Game::mapParser(std::string mapName)
+bool Game::mapParser(std::string mapName)
 {
 	std::ifstream map(mapName);
 
 	int spriteX, spriteY;
 	int obs = 0;
 
-	enum SPRITETYPE {PLAYER, HOUSE, OBST};//1, O2, O3, O4};
+	enum SPRITETYPE {PLAYER, HOUSE, OBST};
 
 	SPRITETYPE spriteType = PLAYER;
 
@@ -184,7 +183,7 @@ void Game::mapParser(std::string mapName)
 							{
 								housePos = grid[spriteX][spriteY].getPosition();
 							}
-							else if (spriteType != PLAYER)
+							else if (spriteType == OBST)
 							{
 								obstaclesPos[obs] = grid[spriteX][spriteY].getPosition();
 								obs++;
@@ -195,21 +194,14 @@ void Game::mapParser(std::string mapName)
 								case OBST:
 									grid[spriteX][spriteY].setTexture(&obstacle);
 									break;
-								/*case O2:
-									grid[spriteX][spriteY].setTexture(&obstacles[1]);
-									break;
-								case O3:
-									grid[spriteX][spriteY].setTexture(&obstacles[2]);
-									break;
-								case O4:
-									grid[spriteX][spriteY].setTexture(&obstacles[3]);
-									break;*/
+
 								case HOUSE:
 									grid[spriteX][spriteY].setTexture(&house[0]);
 									spriteType = OBST;
 									break;
+
 								case PLAYER:								
-									//Setting the playershape
+									//Setting player shape
 									playerObj->loadShape(((float)vmode.height*MULTIPLIER_RATIO));			
 									playerObj->shape.setPosition(grid[spriteX][spriteY].getPosition());
 									playerObj->position.x = playerObj->shape.getPosition().x;
@@ -230,10 +222,12 @@ void Game::mapParser(std::string mapName)
 			}
 		}
 		map.close();
+		return true;
 	}
 	else
 	{
 		std::cerr << "Map File missing" << std::endl;
+		return false;
 	}
 }
 
@@ -254,8 +248,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 	if (enableDrawing)
 	{
-		mapParser("resources/maps/" + levels[level]);
-		enableDrawing = false;
+		loadGame("resources/maps/" + levels[level]);
 	}
 
 	GAMESTATE nextState = PLAYING;

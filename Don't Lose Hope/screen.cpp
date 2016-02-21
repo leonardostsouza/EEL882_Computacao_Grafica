@@ -3,16 +3,29 @@
 Screen::Screen(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 
-// Create the background
+	// Create the background
 	createBackground();
 
-// Loading levels
+	// load fonts for messages
+	loadFonts();
+
+	// Loading levels
 	loadLevels();
 
-// Creating background music
+	// Creating background music
 	createMusic();
 
-//play();
+	// Define message standards
+	message.setString("");
+	message.setCharacterSize(vmode.height/22);
+	message.setPosition(vmode.width/3,vmode.height-vmode.height/12);
+	message.setFont(font[1]);
+	message.setColor(sf::Color(255, 0, 0));
+	message.setStyle(sf::Text::Bold);
+
+	messageBox.setPosition(vmode.width/5.0,vmode.height-vmode.height/12);
+	messageBox.setSize(sf::Vector2f((3*vmode.width / 5.0), (vmode.height / 15)));
+	messageBox.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 
@@ -40,6 +53,23 @@ void Screen::changeMenuColor(int op, GAMESTATE localstate){
 			menu[5].setColor(sf::Color(0, 0, 0,100));	
 		}
 	}
+}
+
+void Screen::loadFonts(){
+	if (!font[0].loadFromFile("resources/fonts/default_font.ttf")) {
+		std::cerr << "Error loading fonts" << std::endl;
+	}
+
+	if (!font[1].loadFromFile("resources/fonts/message_font.ttf")) {
+		std::cerr << "Error loading fonts" << std::endl;
+	}
+}
+
+void Screen::showMessage(std::string txt){// float pos){
+	//message.setPosition(vmode.width/10,pos);
+	message.setString(txt);
+	messageBox.setFillColor(sf::Color(0, 102, 204, 90));
+	ClockSpeed.restart();
 }
 
 void Screen::loadLevels(){
@@ -141,9 +171,6 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						change = true;
 						clickEnable = false;
 						nextState = CONTINUE;
-						#ifdef DEBUG	                  
-						std::cout << "DEBUG === GAMESTATE = \"CONTINUE\"" << std::endl;            
-	                    #endif
 					}						
 				}
 			}
@@ -553,9 +580,10 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 		}			
 	}
 
-//		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-//			nextState = CLOSE;
-//		}
+	if (ClockSpeed.getElapsedTime().asSeconds() < 5) {
+		App->draw(messageBox);
+		App->draw(message);			
+	}
 
 	for (std::vector<sf::Text>::iterator op = menu.begin(); op != menu.end(); op++) {
 		App->draw(*op);
@@ -595,10 +623,7 @@ void Screen::createBackground() {
 void Screen::createMenu(GAMESTATE which, bool change) {
 
 	if (change == true){
-		if (!font.loadFromFile("resources/fonts/default_font.ttf")) {
-			std::cerr << "Error loading fonts" << std::endl;
-			return;
-		}
+		
 		if (which == MAINMENU){
 	//set menu size
 			menu.clear();
@@ -607,27 +632,27 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 			menu[0].setCharacterSize(vmode.height / 12);
 			menu[0].setString("New Game");
 			menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.height / 12)) });
-			menu[0].setFont(font);
+			menu[0].setFont(font[0]);
 			menu[0].setColor(sf::Color(0, 0, 0));
 			menu[1].setCharacterSize(vmode.height / 12);
 			menu[1].setString("Continue");
 			menu[1].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 2*(vmode.height / 12)) });
-			menu[1].setFont(font);
+			menu[1].setFont(font[0]);
 			menu[1].setColor(sf::Color(0, 0, 0));
 			menu[2].setCharacterSize(vmode.height / 12);
 			menu[2].setString("Map Editor");
 			menu[2].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 3*(vmode.height / 12)) });
-			menu[2].setFont(font);
+			menu[2].setFont(font[0]);
 			menu[2].setColor(sf::Color(0, 0, 0));
 			menu[3].setCharacterSize(vmode.height / 12);
 			menu[3].setString("Options");
 			menu[3].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 4*(vmode.height / 12)) });
-			menu[3].setFont(font);
+			menu[3].setFont(font[0]);
 			menu[3].setColor(sf::Color(0, 0, 0));
 			menu[4].setCharacterSize(vmode.height / 12);
 			menu[4].setString("Exit");
 			menu[4].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 5*(vmode.height / 12)) });
-			menu[4].setFont(font);
+			menu[4].setFont(font[0]);
 			menu[4].setColor(sf::Color(0, 0, 0));
 		}else if (which == CHOOSING) {
 			menu.clear();
@@ -640,7 +665,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 					menu[index].setCharacterSize(vmode.height / 12);
 					menu[index].setString(levels[i]);
 					menu[index].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (index+1)*(vmode.height / 12)) });
-					menu[index].setFont(font);
+					menu[index].setFont(font[0]);
 					menu[index].setColor(sf::Color(0, 0, 0));
 				}
 			}else{
@@ -649,14 +674,14 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 					menu[index].setCharacterSize(vmode.height / 12);
 					menu[index].setString(levels[i]);
 					menu[index].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (index+1)*(vmode.height / 12)) });
-					menu[index].setFont(font);
+					menu[index].setFont(font[0]);
 					menu[index].setColor(sf::Color(0, 0, 0));
 				}
 			}
 			menu[4].setCharacterSize(vmode.height / 12);
 			menu[4].setString("Back");
 			menu[4].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 5*(vmode.height / 12)) });
-			menu[4].setFont(font);
+			menu[4].setFont(font[0]);
 			if (page > 0){
 				menu[4].setColor(sf::Color(0, 0, 0));	
 			}else{
@@ -666,7 +691,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 			menu[5].setCharacterSize(vmode.height / 12);
 			menu[5].setString("Next");
 			menu[5].setPosition({ (float)((vmode.width / 3) + (vmode.width / 5)),(float)(vmode.height / 3 + 5*(vmode.height / 12)) });
-			menu[5].setFont(font);
+			menu[5].setFont(font[0]);
 			if (levels.size() > (page+1)*4){
 				menu[5].setColor(sf::Color(0, 0, 0));
 			}else{
@@ -675,7 +700,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 			menu[6].setCharacterSize(vmode.height / 12);
 			menu[6].setString("Main Menu");
 			menu[6].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 6*(vmode.height / 12)) });
-			menu[6].setFont(font);
+			menu[6].setFont(font[0]);
 			menu[6].setColor(sf::Color(0, 0, 0));
 	//menu.resize();
 		}else if (which == OPTIONSMENU){
@@ -692,12 +717,12 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 				menu[0].setString("Sound: No");	
 			}
 			menu[0].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)((vmode.height / 3) + (vmode.height / 12)) });
-			menu[0].setFont(font);
+			menu[0].setFont(font[0]);
 			menu[0].setColor(sf::Color(0, 0, 0));
 			menu[1].setCharacterSize(vmode.height / 12);
 			menu[1].setString("Go Back");
 			menu[1].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 2*(vmode.height / 12)) });
-			menu[1].setFont(font);
+			menu[1].setFont(font[0]);
 			menu[1].setColor(sf::Color(0, 0, 0));
 		}
 	}

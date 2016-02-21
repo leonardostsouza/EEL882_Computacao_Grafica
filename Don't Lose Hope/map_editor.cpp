@@ -121,8 +121,8 @@ bool MapEditor::mapWriter(){
 	if (objPosition[0] != sf::Vector2i({-1,-1}) && objPosition[1] != sf::Vector2i({-1,-1})){
 	std::ofstream map("resources/maps/" + savename);
 	if(map.is_open()){
-		map << "#Map Created by Don't Lose Hope Editor" << std::endl;
-		map << "#|PLAYER_POSITION|HOUSE_POSITION|OBSTACLE1|OBSTACLE2|OBSTACLE3|OBSTACLE4|OBSTACLE5|" << std::endl;
+		map << "#Map Created with Don't Lose Hope Editor" << std::endl;
+		map << "#|PLAYER_POSITION|HOUSE_POSITION|OBSTACLE1|OBSTACLE2|OBSTACLE3|..." << std::endl;
 		for (int i = 0; i< objPosition.size(); i++){
 			map << "|" << objPosition[i].x << "," << objPosition[i].y;
 		}
@@ -199,10 +199,45 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSou
 
 	App->clear();
 	App->draw(background);
+
 	App->draw(toolBox);
 	for (int i = 0; i<tools.size(); i++){
 		App->draw(tools[i]);
 	}
+
+	// Shade player tool button if player already on map
+	if (objPosition[0] != sf::Vector2i({-1,-1}))
+	{
+		sf::RectangleShape mask;
+		mask.setFillColor(sf::Color(255, 255, 255, 150));
+		mask.setPosition(tools[0].getPosition().x, tools[0].getPosition().y);
+		mask.setSize(tools[0].getSize());
+
+		App->draw(mask);
+	}
+
+	// Shade house tool button if house already on map
+	if (objPosition[1] != sf::Vector2i({-1,-1}))
+	{
+		sf::RectangleShape mask;
+		mask.setFillColor(sf::Color(255, 255, 255, 150));
+		mask.setPosition(tools[1].getPosition().x, tools[1].getPosition().y);
+		mask.setSize(tools[1].getSize());
+
+		App->draw(mask);
+	}
+
+	// Shade obstacle tool button if max obstacle quantity reached
+	if (qttObstacles >= MAX_OBSTACLES)
+	{
+		sf::RectangleShape mask;
+		mask.setFillColor(sf::Color(255, 255, 255, 150));
+		mask.setPosition(tools[2].getPosition().x, tools[2].getPosition().y);
+		mask.setSize(tools[2].getSize());
+
+		App->draw(mask);
+	}
+	
 
 	GAMESTATE nextState = CREATING;
 
@@ -254,7 +289,7 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSou
 				{
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 					{
-						if (objPosition[qttObstacles+2] == sf::Vector2i({-1,-1}) && qttObstacles < 5){
+						if (objPosition[qttObstacles+2] == sf::Vector2i({-1,-1}) && qttObstacles < MAX_OBSTACLES){
 							changeMouseBox(WHITE,&sprites[2]);
 							typeChosen = OBSTACLE;
 							clickEnable = false;
@@ -297,7 +332,8 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSou
 									break;
 								}
 
-								if ((typeChosen != NONE && typeChosen != OBSTACLE) || (typeChosen == OBSTACLE && qttObstacles > 4)){
+								if ((typeChosen != NONE))// || (typeChosen == OBSTACLE && qttObstacles >= MAX_OBSTACLES)){
+								{
 									typeChosen = NONE;
 									changeMouseBox(TRANSPARENT);
 								}

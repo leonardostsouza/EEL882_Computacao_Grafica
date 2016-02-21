@@ -18,7 +18,7 @@ public:
 //	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Game();
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
-	GAMESTATE loadGame();
+	bool loadGame(std::string mapName);
 
 protected:
 	void showText(int op);
@@ -28,8 +28,9 @@ protected:
 	void setFullscreen(bool fs);
 	void createGrid();
 	void loadTextures();
-	void mapParser(std::string mapFile);
 	void movePlayer();
+
+	bool mapParser(std::string mapFile);
 	bool saveGame();
 	sf::Vector2f getGridPos(sf::Vector2f objPosition); // return grid position from screen position
 
@@ -49,7 +50,7 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
 	sf::Texture texture;
-	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(5);
+	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(MAX_OBSTACLES, sf::Vector2f({-1,-1}));
 //	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	sf::Texture obstacle;
 	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));

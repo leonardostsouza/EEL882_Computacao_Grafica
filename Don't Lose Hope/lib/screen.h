@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <dirent.h>
 #include "utilities.h"
@@ -21,7 +22,8 @@ public:
 
 	bool isFullscreen();
 	bool isSoundEnabled();	
-	int getChosenLevel(){return chosenlevel;}
+	int getChosenLevel(){return chosenlevel;}	
+	void showMessage(std::string str);//, float position);
 	std::vector<std::string> passLevels(){return levels;}
 
 protected:
@@ -30,6 +32,7 @@ protected:
 	void createMusic();
 	void changeMenuColor(int menuop, GAMESTATE localstate);
 	void loadLevels();
+	void loadFonts();
 	void setSoundEnabled(bool se);
 	void setFullscreen(bool fs);
 
@@ -43,15 +46,21 @@ private:
 	sf::RenderWindow* App;
 	sf::Sprite background;
 	//sf::Text menu[4];
-	sf::Font font;
+	sf::Font font[2];
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;
 	sf::Texture texture;
+
+	sf::Text message;
+	sf::RectangleShape messageBox;
+
 	std::vector<sf::Text> menu;
 	std::vector<std::string> levels;
 	bool clickEnable;
 	int chosenlevel = 0;
 	sf::Vector2i mousePos;
+
+	sf::Clock ClockSpeed;
 };
 
 #endif
