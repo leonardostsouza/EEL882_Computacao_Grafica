@@ -133,6 +133,7 @@ void Game::createGrid()
 void Game::mapParser(std::string mapName)
 {
 	std::ifstream map(mapName);
+
 	int spriteX, spriteY;
 	int obs = 0;
 
@@ -149,7 +150,6 @@ void Game::mapParser(std::string mapName)
 			grid[iterator1][iterator2].setFillColor(sf::Color::Transparent);
 		}
 	}
-
 	if (map.is_open())
 	{	
 		std::string line;
@@ -308,7 +308,10 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 		{
 			playerObj->stop();
 			if (playerObj->splash() == 9){
-				showText(LOSE);	
+				if (state != LOSE) {
+					state = LOSE;
+					showText(LOSE);
+				}
 			}
 		}
 
@@ -319,17 +322,17 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			grid[getGridPos(housePos).x ][getGridPos(housePos).y].setTexture(&house[1]);
 			playerObj->stop();
 			playerObj->shape.setFillColor(sf::Color(0,0,0,0));
-			showText(WIN);
+			if (state != WIN) {
+				state = WIN;
+				showText(WIN);
+			}
 		}
 
 		// move player
 		playerObj->move(playerObj->getDirection());
 		App->draw(playerObj->shape);
 
-		counterTime++;
-		std::cout << counterTime << std::endl;
-
-		if (counterTime < 200){
+		if (ClockSpeed.getElapsedTime().asSeconds() < 5){
 			App->draw(gametext);
 		}
 
@@ -349,7 +352,6 @@ void Game::showText(int op){
 			std::cerr << "Error loading fonts" << std::endl;
 			return;
 		}
-		counterTime = 0;
 		gametext.setCharacterSize(vmode.height / 10);
 		gametext.setFont(font);
 		gametext.setColor(sf::Color(255, 0, 0));
@@ -376,5 +378,5 @@ void Game::showText(int op){
 			default:
 				break;
 		}
-
+		ClockSpeed.restart();
 }

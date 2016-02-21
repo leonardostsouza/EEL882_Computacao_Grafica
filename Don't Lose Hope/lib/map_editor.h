@@ -33,7 +33,7 @@ protected:
 	sf::Vector2i getGridPos(sf::Vector2i objPosition); // return grid position from screen position
 
 private:
-	int counterTime=0;
+	sf::Clock ClockSpeed;
 	bool savestate = false;
 	bool fullscreen;
 	bool clickEnable;

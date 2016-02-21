@@ -38,9 +38,9 @@ private:
 	bool enableDrawing;
 	std::vector<std::string> levels;
 	sf::Text gametext;
-	
+	int state;
 	bool left = true;
-	int counterTime=0;
+	sf::Clock ClockSpeed;
 	int movecounter = 0;
 	sf::VideoMode vmode;
 	sf::RenderWindow* App;
@@ -58,7 +58,7 @@ private:
 	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 
-	enum TYPETEXT {LOSE,WIN,SAVED};
+	enum TYPETEXT {NOTHING,LOSE,WIN,SAVED};
 
 	enum DIRECTION {STOPPED, UP, RIGHT, DOWN, LEFT};
 	int moving;

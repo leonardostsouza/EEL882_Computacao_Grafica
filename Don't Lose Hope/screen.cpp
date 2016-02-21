@@ -53,7 +53,7 @@ void Screen::loadLevels(){
 	}
 	int i=0;
 	while(de = readdir(dir)){
-		if (strcmp(de->d_name,".") and strcmp(de->d_name,"..") and (std::string(de->d_name).find("~",5)==std::string::npos)){
+		if (strcmp(de->d_name,".") && strcmp(de->d_name,"..") && (std::string(de->d_name).find("~",5)==std::string::npos)){
 			levels[i] = de->d_name;
 			i++;
 		}
@@ -562,7 +562,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	}
 	App->display();
 
-	if (nextState == CREATING || nextState == PLAYING){
+	if (nextState != MAINMENU && nextState != OPTIONSMENU && nextState != CHOOSING){
 		bgMusic.stop();
 	}
 
@@ -714,6 +714,7 @@ void Screen::createMusic() {
 		bgMusic.setLoop(true);
 		bgMusic.setVolume(70);
 		bgMusic.play();
+		setSoundEnabled(true);
 	}
 }
 

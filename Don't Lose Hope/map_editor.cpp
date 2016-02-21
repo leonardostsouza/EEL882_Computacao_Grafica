@@ -91,7 +91,7 @@ void MapEditor::setText(){
 void MapEditor::showMessage(std::string txt, float pos){
 	message.setPosition(vmode.width/10,pos);
 	message.setString(txt);
-	counterTime = 0;
+	ClockSpeed.restart();
 }
 
 void MapEditor::createMusic() 
@@ -332,9 +332,8 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSou
 		}else if((sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) && sf::Keyboard::isKeyPressed(sf::Keyboard::H) && keyPressEnable == true){
 			showMessage("Select a cartoon and put it over the grid\nPress Control + S to save. Press ESC to cancel or quit\nPress Delete with the mouse over a cartoon to delete",vmode.height-vmode.height/4);
 		}
-		counterTime++;
 
-		if (counterTime < 200){
+		if (ClockSpeed.getElapsedTime().asSeconds() < 5) {
 			App->draw(message);
 		}
 		App->draw((*mouseBox));
@@ -343,7 +342,6 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSou
 		//showMessage("Name:",vmode.height-vmode.height/10);
 		if (event.type == sf::Event::TextEntered && keyPressEnable){
 			keyPressEnable = false;
-			std::cout << event.key.code << std::endl;
 			if(event.text.unicode == 8){
 				if (savename.size()>0){
 					savename.resize(savename.size()-1);
