@@ -28,15 +28,18 @@ Game::~Game()
 }
 
 void Game::loadMessages(){
+	if (!messageFont.loadFromFile("resources/fonts/message_font.ttf")) {
+		std::cerr << "Error loading message font" << std::endl;
+	}
 	message.setString("");
 	message.setCharacterSize(vmode.height/22);
-	message.setPosition(vmode.width/3,vmode.height-vmode.height/12);
+	message.setPosition(vmode.width/5,vmode.height-vmode.height/12);
 	message.setFont(messageFont);
 	message.setColor(sf::Color(255, 0, 0));
 	message.setStyle(sf::Text::Bold);
 
 	messageBox.setPosition(vmode.width/5.0,vmode.height-vmode.height/12);
-	messageBox.setSize(sf::Vector2f((3*vmode.width / 5.0), (vmode.height / 15)));
+	messageBox.setSize(sf::Vector2f(vmode.width * 0.631, (vmode.height / 15)));
 	messageBox.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
@@ -351,8 +354,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		App->draw(gametext);
 
-		if (ClockSpeed.getElapsedTime().asSeconds() < 5){
-			showMessage("TESTE");
+		if (ClockSpeed.getElapsedTime().asSeconds() > 4){
 			App->draw(messageBox);
 			App->draw(message);	
 		}
@@ -397,5 +399,6 @@ void Game::showText(int op){
 			default:
 				break;
 		}
+		showMessage("Press ESC to return to Main Menu");
 		ClockSpeed.restart();
 }
