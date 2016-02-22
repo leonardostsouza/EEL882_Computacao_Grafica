@@ -144,6 +144,14 @@ void Game::createMusic()
 		std::cerr << "Error loading sound" << std::endl;
 	}
 
+	if (!bsoundEffects[VADER].loadFromFile("resources/sounds/vader_voice.ogg")) {
+		std::cerr << "Error loading sound" << std::endl;
+	}
+
+	if (!bsoundEffects[YODA].loadFromFile("resources/sounds/yoda_voice.ogg")) {
+		std::cerr << "Error loading sound" << std::endl;
+	}
+
 	soundEffects.setVolume(100);
 	soundEffects.stop();
 }
@@ -289,6 +297,7 @@ bool Game::mapParser(std::string mapName)
 
 void Game::retryGame() {
 	gametext.setString("");
+	soundEffects.stop();
 	state = NOTHING;
 	enableDrawing = true;
 }
@@ -377,6 +386,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 				if (state != LOSE) {
 					state = LOSE;
 					showText(LOSE);
+					playEffect(VADER);
 				}
 			}
 		}
@@ -391,7 +401,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if (state != WIN) {
 				state = WIN;
 				showText(WIN);
-				soundEffects.stop();
+				playEffect(YODA);
 			}
 		}
 
