@@ -129,7 +129,7 @@ void Game::createMusic()
 	else {
 		bgMusic.setBuffer(buffer);
 		bgMusic.setLoop(true);
-		bgMusic.setVolume(30);
+		bgMusic.setVolume(15);
 	}
 
 	if (!bsoundEffects[WATER_SPLASH].loadFromFile("resources/sounds/water_splash.ogg")) {
@@ -321,7 +321,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			App->draw(grid[i][j]);
 
 		if (playerObj->getDirection() == STOPPED){
-			soundEffects.stop();
+			//soundEffects.stop();
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 				if (playerObj->getDirection() != UP){
 					playEffect(SKYING,true);
