@@ -391,6 +391,7 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if (state != WIN) {
 				state = WIN;
 				showText(WIN);
+				soundEffects.stop();
 			}
 		}
 
