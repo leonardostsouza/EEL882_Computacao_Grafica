@@ -101,6 +101,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 	createMenu(localstate,change);
 	change = false;
 	GAMESTATE nextState;
+
 	if (isSoundEnabled()){
 		if (bgMusic.getStatus() != sf::SoundSource::Status::Playing)
 		{
@@ -603,24 +604,13 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 
 
 void Screen::createBackground() {
-	std::string fileName;
 
-	if (fullscreen){
-		fileName = "resources/images/menu_background_fullscreen.png";
-	} 
-	else 
-	{
-		fileName = "resources/images/menu_background_window.png";
-	}
-
-
-	if (!texture.loadFromFile(fileName)) {
+	if (!texture.loadFromFile("resources/images/menu_background.png")) {
 		std::cerr << "Error loading background" << std::endl;
 	}
 	else {
 		texture.setSmooth(true);
 		background.setTexture(texture);
-		background.scale((float)vmode.width / (float)texture.getSize().x, (float)vmode.height / (float)texture.getSize().y);
 	}
 }
 
@@ -742,7 +732,8 @@ void Screen::createMusic() {
 		bgMusic.setBuffer(buffer);
 		bgMusic.setLoop(true);
 		bgMusic.setVolume(70);
-		bgMusic.play();
+		bgMusic.stop();
+		//bgMusic.play();
 		setSoundEnabled(true);
 	}
 }

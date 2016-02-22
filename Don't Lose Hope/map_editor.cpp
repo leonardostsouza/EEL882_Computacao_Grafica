@@ -37,26 +37,25 @@ void MapEditor::loadTextures()
 	if(!sprites[0].loadFromFile("resources/images/sprites.png", sf::IntRect(34,0,39,41)))
 		std::cerr << "Error loading player textures" << std::endl;
 
+	
+
 }
 
 void MapEditor::createBackground() 
 {
-	std::string fileName;
-	fileName = "resources/images/game_background.png";
-
-	if (!texture.loadFromFile(fileName)) {
+	if (!texture.loadFromFile("resources/images/BackGround1.png")) {
 		std::cerr << "Error loading background" << std::endl;
 	}
 	else {
 		texture.setSmooth(true);
 		background.setTexture(texture);
-		background.scale(((float)vmode.width*1.2) / (float)texture.getSize().x, (float)vmode.height / (float)texture.getSize().y);
-		background.setPosition(-(float)vmode.width*1/8,0);
+		//background.scale(((float)vmode.width*1.2) / (float)texture.getSize().x, (float)vmode.height / (float)texture.getSize().y);
+		//background.setPosition(-(float)vmode.width*1/8,0);
 	}
 
 	toolBox.setSize(sf::Vector2f((vmode.width / 9), (vmode.height / 2.2)));
 	toolBox.setPosition(20, vmode.height/3.4);
-	toolBox.setFillColor(sf::Color(0, 102, 204, 90));
+	toolBox.setFillColor(sf::Color(255, 255, 255, 80));
 
 	mouseBox = new sf::RectangleShape;
 	mouseBox->setSize(sf::Vector2f(((float)vmode.height*MULTIPLIER_RATIO),((float)vmode.height*MULTIPLIER_RATIO)));
@@ -97,7 +96,7 @@ void MapEditor::showMessage(std::string txt, float pos){
 void MapEditor::createMusic() 
 {
 
-	if (!buffer.loadFromFile("resources/sounds/game.ogg")){
+	if (!buffer.loadFromFile("resources/sounds/map_editor.ogg")){
 		std::cerr << "Error loading sound" << std::endl;
 	}
 	else {

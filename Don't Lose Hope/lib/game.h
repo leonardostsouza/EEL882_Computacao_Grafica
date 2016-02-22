@@ -19,6 +19,7 @@ public:
 	~Game();
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
 	bool loadGame(std::string mapName);
+	void setEnableDrawer(bool opt) { enableDrawing = opt; };
 
 protected:
 	void showText(int op);
@@ -30,9 +31,11 @@ protected:
 	void loadTextures();
 	void loadMessages();
 	void movePlayer();
-
+	void playEffect(int sound, bool loop = false);
+	void changeBG();
+	
 	void showMessage(std::string str);
-
+	void retryGame();
 	bool mapParser(std::string mapFile);
 	bool saveGame();
 	sf::Vector2f getGridPos(sf::Vector2f objPosition); // return grid position from screen position
@@ -40,6 +43,7 @@ protected:
 private:
 	bool fullscreen;
 	bool enableDrawing;
+	int bgCounter = 0;
 	std::vector<std::string> levels;
 	sf::Text gametext;
 	int state;
@@ -50,9 +54,11 @@ private:
 	sf::Sprite background;
 	sf::Font font;
 	sf::Font messageFont;
+	std::vector<sf::SoundBuffer> bsoundEffects = std::vector<sf::SoundBuffer>(5);
+	sf::Sound soundEffects;
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
-	sf::Texture texture;
+	std::vector<sf::Texture> bgTextures = std::vector<sf::Texture>(4);
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(MAX_OBSTACLES, sf::Vector2f({-1,-1}));
 //	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	sf::Texture obstacle;
@@ -63,10 +69,13 @@ private:
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 
 	sf::Clock ClockSpeed;
+	sf::Clock BgSpeed;
 	sf::Text message;
 	sf::RectangleShape messageBox;
 
 	enum TYPETEXT {NOTHING,LOSE,WIN,SAVED};
+
+	enum SOUNDS {WATER_SPLASH, HIT_OBSTACLES, SKYING, VADER, YODA};
 
 	enum DIRECTION {STOPPED, UP, RIGHT, DOWN, LEFT};
 	int moving;

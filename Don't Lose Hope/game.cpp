@@ -68,7 +68,7 @@ bool Game::saveGame(){
 void Game::showMessage(std::string str)
 {
 	message.setString(str);
-	messageBox.setFillColor(sf::Color(0, 102, 204, 90));
+	messageBox.setFillColor(sf::Color(255, 255, 255, 80));
 	//ClockSpeed.restart();
 }
 
@@ -98,17 +98,25 @@ void Game::loadTextures()
 
 void Game::createBackground() 
 {
-	std::string fileName;
-	fileName = "resources/images/game_background.png";
-
-	if (!texture.loadFromFile(fileName)) {
-		std::cerr << "Error loading background" << std::endl;
+	std::string filename;
+	for (int i = 0; i < 4; i++) { //"BackGround"+(i+1))
+		filename = "resources/images/BackGround" + std::to_string((i+1)) + ".png";
+		if (!bgTextures[i].loadFromFile(filename)) {
+			std::cerr << "Error loading background" << std::endl;
+		}
+		else {
+			bgTextures[i].setSmooth(true);
+		}
 	}
-	else {
-		texture.setSmooth(true);
-		background.setTexture(texture);
-		background.scale(((float)vmode.width*1.2) / (float)texture.getSize().x, (float)vmode.height / (float)texture.getSize().y);
-		background.setPosition(-(float)vmode.width*1/8,0);
+	background.setTexture(bgTextures[0]);
+}
+
+void Game::changeBG() {
+	if (BgSpeed.getElapsedTime().asSeconds() >= 0.3f) {
+		if (bgCounter > 3) bgCounter = 0;
+		background.setTexture(bgTextures[bgCounter]);
+		bgCounter++;
+		BgSpeed.restart();
 	}
 }
 
@@ -121,8 +129,29 @@ void Game::createMusic()
 	else {
 		bgMusic.setBuffer(buffer);
 		bgMusic.setLoop(true);
-		bgMusic.setVolume(70);
+		bgMusic.setVolume(30);
 	}
+
+	if (!bsoundEffects[WATER_SPLASH].loadFromFile("resources/sounds/water_splash.ogg")) {
+		std::cerr << "Error loading sound" << std::endl;
+	}
+
+	if (!bsoundEffects[HIT_OBSTACLES].loadFromFile("resources/sounds/obstacle_hit.ogg")) {
+		std::cerr << "Error loading sound" << std::endl;
+	}
+
+	if (!bsoundEffects[SKYING].loadFromFile("resources/sounds/walking.ogg")) {
+		std::cerr << "Error loading sound" << std::endl;
+	}
+
+	soundEffects.setVolume(100);
+	soundEffects.stop();
+}
+
+void Game::playEffect(int sound,bool loop) {
+	soundEffects.setBuffer(bsoundEffects[sound]);
+	soundEffects.setLoop(loop);
+	soundEffects.play();
 }
 
 bool Game::isFullscreen()
@@ -258,6 +287,12 @@ bool Game::mapParser(std::string mapName)
 	}
 }
 
+void Game::retryGame() {
+	gametext.setString("");
+	state = NOTHING;
+	enableDrawing = true;
+}
+
 GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level) 
 {
 	// Play background music
@@ -271,11 +306,12 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 	
 
 	App->clear();
+	changeBG();
 	App->draw(background);
-
 	if (enableDrawing)
 	{
 		loadGame("resources/maps/" + levels[level]);
+		showMessage(" Press R: Retry or RCTRL+S: Save");
 	}
 
 	GAMESTATE nextState = PLAYING;
@@ -285,27 +321,34 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			App->draw(grid[i][j]);
 
 		if (playerObj->getDirection() == STOPPED){
+			soundEffects.stop();
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 				if (playerObj->getDirection() != UP){
+					playEffect(SKYING,true);
 					playerObj->setDirection(UP);
 				}	
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 				if (playerObj->getDirection() != RIGHT){
+					playEffect(SKYING, true);
 					playerObj->setDirection(RIGHT);
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if (playerObj->getDirection() != DOWN){					
+				if (playerObj->getDirection() != DOWN){	
+					playEffect(SKYING, true);
 					playerObj->setDirection(DOWN);				
 				}
 			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 				if (playerObj->getDirection() != LEFT){
+					playEffect(SKYING, true);
 					playerObj->setDirection(LEFT);
 				}
 			}else if((sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
 				if (saveGame()){
 					showText(SAVED);
 				}
-			}				
+			}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+				retryGame();
+			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 			playerObj->stop();
@@ -318,16 +361,19 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			if( getGridPos(obstaclesPos[i]).x == getGridPos(playerObj->getNextPosition()).x &&
 				getGridPos(obstaclesPos[i]).y == getGridPos(playerObj->getNextPosition()).y)
 			{
+				playEffect(HIT_OBSTACLES);
 				playerObj->stop();
 			}
 		}
 
 		// check if player is outside the grid
 		if( getGridPos(playerObj->position).x < -1 || getGridPos(playerObj->position).x > 6 ||
-			getGridPos(playerObj->position).y < -1 || getGridPos(playerObj->position).y > 7)
+			getGridPos(playerObj->position).y < -1 || getGridPos(playerObj->position).y > 6)
 		{
 			playerObj->stop();
-			if (playerObj->splash() == 9){
+			if (playerObj->splash() == 1) {
+				playEffect(WATER_SPLASH);
+			}else if (playerObj->splash() == 9){
 				if (state != LOSE) {
 					state = LOSE;
 					showText(LOSE);
@@ -354,9 +400,14 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		App->draw(gametext);
 
-		if (ClockSpeed.getElapsedTime().asSeconds() > 4){
+		if (ClockSpeed.getElapsedTime().asSeconds() > 4 && (state != NOTHING && state != SAVED)){
 			App->draw(messageBox);
 			App->draw(message);	
+		}
+
+		if (ClockSpeed.getElapsedTime().asSeconds() < 4 && state == NOTHING ) {
+			App->draw(messageBox);
+			App->draw(message);
 		}
 
 		App->display();
@@ -382,11 +433,13 @@ void Game::showText(int op){
 			case LOSE:
 				gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height/2) - (vmode.height / 5))});
 				gametext.setString("I find your lack of\n\t\t\tHOPE \n\t\tdisturbing");
+				showMessage(" Press R: Retry or ESC: Main Menu");
 				break;
 
 			case WIN:
 				gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height / 2) - (vmode.height / 20))});
-				gametext.setString("HOPE, YOU HAVE FOUND");
+				gametext.setString("FOUND HOPE, YOU HAVE");
+				showMessage(" Press R: Retry or ESC: Main Menu");
 				break;
 
 			case SAVED:
@@ -399,6 +452,6 @@ void Game::showText(int op){
 			default:
 				break;
 		}
-		showMessage("Press ESC to return to Main Menu");
+		
 		ClockSpeed.restart();
 }

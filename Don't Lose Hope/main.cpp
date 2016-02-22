@@ -1,8 +1,11 @@
 #include "lib/screen.h"
 #include "lib/game.h"
 #include "lib/map_editor.h"
-//include "lib/utilities.h"
+#include "lib/utilities.h"
 #include <string.h>
+
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+
 
 using namespace std;
 
@@ -41,7 +44,8 @@ int main(int argc, char *argv[])
     }
 
 // Create the main window
-    App = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope");
+    App = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope",sf::Style::Close);
+	App->setIcon(dlh_icon.width, dlh_icon.height, dlh_icon.pixel_data);
     sf::View view(App->getDefaultView());
     App->setFramerateLimit(60);
     App->setVerticalSyncEnabled(true);
@@ -121,7 +125,7 @@ while (App->isOpen())
         if (event.type == sf::Event::Closed)
             App->close();
 
-        if (event.type == sf::Event::Resized){
+        /*if (event.type == sf::Event::Resized){
             if (vmode.width != event.size.width){
                 vmode.width = event.size.width;
                 vmode.height = event.size.height;
@@ -134,7 +138,7 @@ while (App->isOpen())
                 game = new Game(fs,App,vmode,menu->passLevels());
                 map_editor = new MapEditor(fs,App,vmode);
             }
-        }
+        }*/
     }
 }
 
