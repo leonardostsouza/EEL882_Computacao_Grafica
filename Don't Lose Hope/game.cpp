@@ -331,22 +331,22 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		if (playerObj->getDirection() == STOPPED){
 			//soundEffects.stop();
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && state == NOTHING){
 				if (playerObj->getDirection() != UP){
 					playEffect(SKYING,true);
 					playerObj->setDirection(UP);
 				}	
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && state == NOTHING){
 				if (playerObj->getDirection() != RIGHT){
 					playEffect(SKYING, true);
 					playerObj->setDirection(RIGHT);
 				}
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && state == NOTHING){
 				if (playerObj->getDirection() != DOWN){	
 					playEffect(SKYING, true);
 					playerObj->setDirection(DOWN);				
 				}
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && state == NOTHING){
 				if (playerObj->getDirection() != LEFT){
 					playEffect(SKYING, true);
 					playerObj->setDirection(LEFT);
