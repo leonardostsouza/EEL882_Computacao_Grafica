@@ -19,7 +19,9 @@ SFML_PATH32=./lib/sfmlx86
 SFML_PATH64=./lib/sfmlx64
 
 ARCH = $(shell getconf LONG_BIT)
-	
+
+FULLPATH = $(shell pwd)
+
 ifeq ($(ARCH),64)
 	libs=$(SFML_PATH64)
 else
@@ -33,7 +35,7 @@ default: $(SOURCE_FILES)
 	g++ -std=c++11 -O3 -c map_editor.cpp -o $(MAP_EDITOR_OBJ) -I$(libs)/include
 	g++ -std=c++11 -O3 -c main.cpp -o $(MAIN_OBJ) -I$(libs)/include
 	g++ -std=c++11 -o $(EXEC_FILE) $(MAIN_OBJ) $(SCREEN_OBJ) $(GAME_OBJ) $(PLAYER_OBJ) $(MAP_EDITOR_OBJ) -L$(libs)/lib $(SFML_FLAGS) -Wl,-rpath=$(libs)/lib/
-	gvfs-set-attribute DLH metadata::custom-icon file://"$(pwd)/resources/images/icon.png"
+	gvfs-set-attribute DLH metadata::custom-icon file://"$(FULLPATH)/resources/images/icon.png"
 	./DLH
 
 debug-mode: $(SOURCE_FILES)
