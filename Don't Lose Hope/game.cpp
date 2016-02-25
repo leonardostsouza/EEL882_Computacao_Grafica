@@ -358,7 +358,10 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 					showText(SAVED);
 				}
 			}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-				retryGame();
+				if(state == LOSE || state == WIN)
+				{
+					retryGame();
+				}				
 			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){

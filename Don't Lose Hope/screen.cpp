@@ -264,7 +264,6 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 			loadLevels();
 		}
 		// Menu Options mousover and clicking Handling
-		//std::cout << "X: " << vmode.width << " |Y: " << vmode.height << std::endl;
 		if((mousePos.x >= (vmode.width / 3)) && (mousePos.x <= 2*(vmode.width / 3)))
 		{
 			// FIRST PHASE
@@ -619,7 +618,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 	if (change == true){
 		
 		if (which == MAINMENU){
-	//set menu size
+		//set menu size
 			menu.clear();
 			menu.resize(5);
 
@@ -696,7 +695,7 @@ void Screen::createMenu(GAMESTATE which, bool change) {
 			menu[6].setPosition({ (float)((vmode.width / 3) + (vmode.width / 32)),(float)(vmode.height / 3 + 6*(vmode.height / 12)) });
 			menu[6].setFont(font[0]);
 			menu[6].setColor(sf::Color(0, 0, 0));
-	//menu.resize();
+
 		}else if (which == OPTIONSMENU){
 	//set menu size
 			menu.clear();
@@ -733,7 +732,7 @@ void Screen::createMusic() {
 		bgMusic.setLoop(true);
 		bgMusic.setVolume(70);
 		bgMusic.stop();
-		//bgMusic.play();
+
 		setSoundEnabled(true);
 	}
 }
