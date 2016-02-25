@@ -73,7 +73,7 @@ private:
 	sf::Text message;
 	sf::RectangleShape messageBox;
 
-	enum TYPETEXT {NOTHING,LOSE,WIN,SAVED};
+	enum TYPETEXT {IN_GAME,LOSE,WIN,SAVED};
 
 	enum SOUNDS {WATER_SPLASH, HIT_OBSTACLES, SKYING, VADER, YODA};
 

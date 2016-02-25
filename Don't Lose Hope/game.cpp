@@ -20,6 +20,8 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::str
 
 	// Define message standards
 	loadMessages();
+
+	state = IN_GAME;
 }
 
 
@@ -298,7 +300,7 @@ bool Game::mapParser(std::string mapName)
 void Game::retryGame() {
 	gametext.setString("");
 	soundEffects.stop();
-	state = NOTHING;
+	state = IN_GAME;
 	enableDrawing = true;
 }
 
@@ -331,22 +333,22 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		if (playerObj->getDirection() == STOPPED){
 			//soundEffects.stop();
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && state == NOTHING){
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && state == IN_GAME){
 				if (playerObj->getDirection() != UP){
 					playEffect(SKYING,true);
 					playerObj->setDirection(UP);
 				}	
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && state == NOTHING){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && state == IN_GAME){
 				if (playerObj->getDirection() != RIGHT){
 					playEffect(SKYING, true);
 					playerObj->setDirection(RIGHT);
 				}
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && state == NOTHING){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && state == IN_GAME){
 				if (playerObj->getDirection() != DOWN){	
 					playEffect(SKYING, true);
 					playerObj->setDirection(DOWN);				
 				}
-			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && state == NOTHING){
+			}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && state == IN_GAME){
 				if (playerObj->getDirection() != LEFT){
 					playEffect(SKYING, true);
 					playerObj->setDirection(LEFT);
@@ -411,12 +413,12 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 
 		App->draw(gametext);
 
-		if (ClockSpeed.getElapsedTime().asSeconds() > 4 && (state != NOTHING && state != SAVED)){
+		if (ClockSpeed.getElapsedTime().asSeconds() > 4 && (state != IN_GAME && state != SAVED)){
 			App->draw(messageBox);
 			App->draw(message);	
 		}
 
-		if (ClockSpeed.getElapsedTime().asSeconds() < 4 && state == NOTHING ) {
+		if (ClockSpeed.getElapsedTime().asSeconds() < 4 && state == IN_GAME ) {
 			App->draw(messageBox);
 			App->draw(message);
 		}
