@@ -15,8 +15,8 @@ class Game
 {
 public:
 	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0}, std::vector<std::string> maps = {""});
-//	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Game();
+	
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
 	bool loadGame(std::string mapName);
 	void setEnableDrawer(bool opt) { enableDrawing = opt; };

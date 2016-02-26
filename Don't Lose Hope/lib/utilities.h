@@ -27,6 +27,8 @@
 
 enum GAMESTATE {MAINMENU, OPTIONSMENU, PLAYING, CLOSE, CHOOSING, CREATING, CONTINUE};
 
+
+// game icon
 static const struct {
 	unsigned int 	 width;
 	unsigned int 	 height;

@@ -256,7 +256,6 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 			changeMenuColor(-1,localstate);
 			clickEnable = false;
 		}
-		///Add a mouseclick handler. Whenever he changes the screen, changes the state to the desired one :D
 	}
 	else if (localstate == CHOOSING){
 		nextState = CHOOSING;

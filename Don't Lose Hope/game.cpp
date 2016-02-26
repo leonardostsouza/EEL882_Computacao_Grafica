@@ -1,7 +1,6 @@
 #include "lib/game.h"
 
 Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), fullscreen (fs) , vmode (vm) , levels(maps)
-//Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
 {
 	//create player
 	playerObj = new Player();
@@ -71,7 +70,6 @@ void Game::showMessage(std::string str)
 {
 	message.setString(str);
 	messageBox.setFillColor(sf::Color(255, 255, 255, 80));
-	//ClockSpeed.restart();
 }
 
 
@@ -101,7 +99,7 @@ void Game::loadTextures()
 void Game::createBackground() 
 {
 	std::string filename;
-	for (int i = 0; i < 4; i++) { //"BackGround"+(i+1))
+	for (int i = 0; i < 4; i++) {
 		filename = "resources/images/BackGround" + std::to_string((i+1)) + ".png";
 		if (!bgTextures[i].loadFromFile(filename)) {
 			std::cerr << "Error loading background" << std::endl;
@@ -461,7 +459,6 @@ void Game::showText(int op){
 			case SAVED:
 				gametext.setCharacterSize(vmode.height/26);
 				gametext.setPosition(vmode.width/10,vmode.height-vmode.height/10);
-				//gametext.setPosition({ (float)(vmode.width / 5),(float)((vmode.height/2) - (vmode.height / 5))});
 				gametext.setString("Saved");
 				break;
 

@@ -2,7 +2,6 @@
 
 Player::Player()
 {
-	//current_lifes = PLAYER_MAX_LIFES;
 	direction = STOPPED;
 	movecounter = 0;
 	splashCounter = 0;
