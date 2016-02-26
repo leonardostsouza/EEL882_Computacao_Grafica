@@ -13,21 +13,6 @@ Player::Player()
 
 Player::~Player(){}
 
-/*Player::setLifes(unsigned int lifeQtt)
-{
-	current_lifes = lifeQtt;
-}
-
-Player::getLifes()
-{
-	return current_lifes;
-}*/
-
-/*sf::Vector2f Player::getPosition()
-{
-	return playerPosition;
-}*/
-
 int Player::getDirection()
 {
 	return direction;

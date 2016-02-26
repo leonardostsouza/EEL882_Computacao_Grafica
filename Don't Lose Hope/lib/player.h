@@ -24,45 +24,52 @@ public:
 	Player();
 	~Player();
 
-	// NOT IMPLEMENTED YET
-	//void setLifes(unsigned int lifeQtt);
-	//unsigned int getLifes();
-
-	//sf::Vector2f getPosition();
-	//void setPosition();
-
+	/*******************************************************
+	*  void move(int moveDirection)
+	*  moves player continuouslly in a given direction 
+	*  movedirection -  direction to which player will move 
+	*					treated values are listed in enum MOVEMENT
+	********************************************************/	
 	void move(int moveDirection);
 	void stop();
 
-	int getDirection();
-	void setDirection(int newDirection);
+	int getDirection();	
+	void setDirection(int newDirection); // changes direction player is oriented
 
-	void loadTextures();
+	void loadTextures(); // loads player textures (human and splash)
+
+	/*******************************************************
+	*  void loadShape(int size)
+	*  loads and sets parameters for player shape
+	*  int size - dimentions the shape will take (size x size)
+	********************************************************/
 	void loadShape(int size);
 
-	int splash();
+	int splash(); // triggers water splash animation. Called when player steps on water
 
+	/*******************************************************
+	*  sf::Vector2f getNextPosition()
+	*  returns the position on screen which will be occupied by the player
+	*  if it continues in the same trajectory
+	********************************************************/
 	sf::Vector2f getNextPosition();
 	
 	sf::RectangleShape shape; // Player shape
-
 	sf::Vector2f position; // Player position on screen
 protected:
 
 private:
-	//unsigned int current_lifes;
+	// control variables
 	int direction;
 	int movecounter = 0;
 	int splashCounter = 0;
-
 	int shapeSize = 0;
-
-	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
-	std::vector<sf::Texture> splashTextures = std::vector<sf::Texture>(9);
-
 	sf::Clock ClockAnimation;
 	sf::Clock ClockSpeed;
-	
+
+	// textures
+	std::vector<std::vector<sf::Texture>> textures = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
+	std::vector<sf::Texture> splashTextures = std::vector<sf::Texture>(9);
 };
 
 
