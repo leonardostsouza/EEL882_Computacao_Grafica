@@ -1,6 +1,6 @@
 #include "lib/screen.h"
 
-Screen::Screen(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm) 
+Screen::Screen(sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), vmode (vm) 
 {
 
 	// Create the background
@@ -734,16 +734,6 @@ void Screen::createMusic() {
 
 		setSoundEnabled(true);
 	}
-}
-
-bool Screen::isFullscreen()
-{
-	return fullscreen;
-}
-
-void Screen::setFullscreen(bool fs)
-{
-	fullscreen = fs;
 }
 
 bool Screen::isSoundEnabled()

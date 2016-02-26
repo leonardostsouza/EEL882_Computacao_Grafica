@@ -14,10 +14,10 @@
 class Game
 {
 public:
-	Game(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0}, std::vector<std::string> maps = {""});
+	Game(sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0}, std::vector<std::string> maps = {""});
 	~Game();
 	
-	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
+	GAMESTATE eventHandler(bool isSoundEnabled, int level);
 
 	/*******************************************************
 	*  bool loadGame(std::string mapName);
@@ -36,11 +36,6 @@ protected:
 	*  The background music is loaded into an exclusive buffer while the sounds effects swaps the buffer.
 	********************************************************/
 	void createMusic(); 
-
-	// SHALL BE REMOVED
-	bool isFullscreen();
-	void setFullscreen(bool fs);
-
 
 	void createGrid(); // Create the grid so the player can orientate himself
 	void loadTextures(); //Load all the textures necessaries to the game
@@ -81,7 +76,6 @@ protected:
 
 private:
 	//Control Variables
-	bool fullscreen;
 	bool enableDrawing;
 	bool left = true;
 	int state;

@@ -1,6 +1,6 @@
 #include "lib/map_editor.h"
 
-MapEditor::MapEditor(bool fs, sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), fullscreen (fs) , vmode (vm)
+MapEditor::MapEditor(sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), vmode (vm)
 {
 //Load the player
 	loadTextures();
@@ -106,16 +106,6 @@ void MapEditor::createMusic()
 	}
 }
 
-bool MapEditor::isFullscreen()
-{
-	return this->fullscreen;
-}
-
-void MapEditor::setFullscreen(bool fs)
-{
-	this->fullscreen = fs;
-}
-
 bool MapEditor::mapWriter(){
 	if (objPosition[0] != sf::Vector2i({-1,-1}) && objPosition[1] != sf::Vector2i({-1,-1})){
 	std::ofstream map("resources/maps/" + savename);
@@ -185,7 +175,7 @@ sf::Vector2i MapEditor::getGridPos(sf::Vector2i objPosition){
 	return pos;
 }
 
-GAMESTATE MapEditor::eventHandler(sf::Event event, bool isFullscreen, bool isSoundEnabled) 
+GAMESTATE MapEditor::eventHandler(sf::Event event, bool isSoundEnabled) 
 {
 // Play background music
 	if (isSoundEnabled)

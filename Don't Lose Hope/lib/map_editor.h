@@ -13,10 +13,10 @@
 class MapEditor
 {
 public:
-	MapEditor(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
+	MapEditor(sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~MapEditor();
 
-	GAMESTATE eventHandler(sf::Event event,bool isFullscren, bool isSoundEnabled);
+	GAMESTATE eventHandler(sf::Event event, bool isSoundEnabled);
 
 protected:
 	void createBackground(); // sets up game background
@@ -25,9 +25,6 @@ protected:
 	void loadTextures(); // sets up textures
 	bool mapWriter(); // saves created map as a file
 
-	bool isFullscreen();
-	void setFullscreen(bool fs);
-	
 	/*******************************************************
 	*  void changeMouseBox(int type, sf::Texture* txt)
 	*  changes texture in mouse box
@@ -63,7 +60,6 @@ private:
 	// control variales
 	sf::Clock ClockSpeed;
 	bool savestate = false;
-	bool fullscreen;
 	bool clickEnable;
 	bool keyPressEnable;
 	int typeChosen=NONE;

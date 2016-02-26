@@ -16,14 +16,15 @@
 class Screen
 {
 public:
-	Screen(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
+	Screen(sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~Screen();
+
 	GAMESTATE eventHandler(GAMESTATE localstate);
 
-	bool isFullscreen();
 	bool isSoundEnabled();	
-	int getChosenLevel(){return chosenlevel;}	
-	void showMessage(std::string str);
+
+	int getChosenLevel(){return chosenlevel;}	// returns level chosen by player
+	void showMessage(std::string str);	// shows message on screen
 
 	std::vector<std::string> passLevels(){return levels;} // returns a vector with the names of maps available for playing
 
@@ -52,13 +53,11 @@ protected:
 	void loadLevels(); // loads the names of the levels available for playing
 	void loadFonts();	// loads fonts used in menus
 
-	void setSoundEnabled(bool se); 
-	void setFullscreen(bool fs);
+	void setSoundEnabled(bool se);
 
 private:
 	// window variables
 	bool levelsloaded = false;
-	bool fullscreen;
 	bool soundEnabled;
 
 	sf::VideoMode vmode;

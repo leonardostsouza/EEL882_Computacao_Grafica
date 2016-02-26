@@ -1,6 +1,6 @@
 #include "lib/game.h"
 
-Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), fullscreen (fs) , vmode (vm) , levels(maps)
+Game::Game(sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), vmode (vm) , levels(maps)
 {
 	//create player
 	playerObj = new Player();
@@ -161,17 +161,6 @@ void Game::playEffect(int sound,bool loop) {
 	soundEffects.play();
 }
 
-bool Game::isFullscreen()
-{
-	return this->fullscreen;
-}
-
-void Game::setFullscreen(bool fs)
-{
-	this->fullscreen = fs;
-}
-
-
 sf::Vector2f Game::getGridPos(sf::Vector2f objPosition){
 	sf::Vector2f pos;
 	pos.x = (int)round((objPosition.x - ((float)vmode.width*X_RATIO)) / ((float)vmode.height*MULTIPLIER_RATIO));
@@ -301,7 +290,7 @@ void Game::retryGame() {
 	enableDrawing = true;
 }
 
-GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level) 
+GAMESTATE Game::eventHandler(bool isSoundEnabled, int level) 
 {
 	// Play background music
 	if (isSoundEnabled)

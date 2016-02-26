@@ -11,47 +11,22 @@
 int main(int argc, char *argv[])
 {
     GAMESTATE state = MAINMENU;
-    bool fs = false;
-
-// check for execution flags
-#ifdef DEBUG
-    std::cout << "DEBUG === Entering flag parse loop" << std::endl;
-#endif
-    for (int iterator = 1; iterator < argc; iterator++)
-    {
-        if (strcmp(argv[1],"-f") == 0)
-        {
-            //fs = true;
-        #ifdef DEBUG
-            std::cout << "DEBUG === fullscreen set to " << fs << std::endl;
-        #endif
-        }
-    }
 
     //set Video Mode
     sf::VideoMode vmode;
     sf::RenderWindow* App;
     int style = 0;
 
-    if (!fs)
-    {
-        vmode.width = DEFAULT_WINDOW_WIDTH;
-        vmode.height = DEFAULT_WINDOW_HEIGHT;
-        vmode.bitsPerPixel = sf::VideoMode::getDesktopMode().bitsPerPixel;
-        style = sf::Style::Close|sf::Style::Titlebar;
-    }
-    else
-    {
-        vmode = sf::VideoMode::getFullscreenModes()[0];
-        style = sf::Style::Close|sf::Style::Titlebar|sf::Style::Fullscreen;
-    }
+    vmode.width = DEFAULT_WINDOW_WIDTH;
+    vmode.height = DEFAULT_WINDOW_HEIGHT;
+    vmode.bitsPerPixel = sf::VideoMode::getDesktopMode().bitsPerPixel;
 
     // Create main window
-    App = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope", style);
+    App = new sf::RenderWindow(sf::VideoMode(vmode.width, vmode.height, vmode.bitsPerPixel), "Don't Lose Hope", sf::Style::Close|sf::Style::Titlebar);
 	App->setIcon(dlh_icon.width, dlh_icon.height, dlh_icon.pixel_data);
-    sf::View view(App->getDefaultView());
     App->setFramerateLimit(60);
     App->setVerticalSyncEnabled(true);
+    sf::View view(App->getDefaultView());
 
     Screen* menu = NULL;            // Main Menu Screen object
     Game* game = NULL;              // Game Screen object
@@ -76,7 +51,7 @@ while (App->isOpen())
         }
 
         if (menu == NULL){
-            menu = new Screen(fs,App,vmode);
+            menu = new Screen(App,vmode);
         }
         state = menu->eventHandler(state);
         break;
@@ -94,7 +69,7 @@ while (App->isOpen())
         // load game
         case CONTINUE:
         if (game == NULL){
-            game = new Game(fs,App,vmode,menu->passLevels());
+            game = new Game(App,vmode,menu->passLevels());
         }
         if (game->loadGame("resources/saves/savegame")){
             state = PLAYING;
@@ -109,17 +84,17 @@ while (App->isOpen())
         // map editor screen
         case CREATING:
             if (map_editor == NULL){
-                map_editor = new MapEditor(fs,App,vmode);
+                map_editor = new MapEditor(App,vmode);
             }
-            state = map_editor->eventHandler(event,menu->isFullscreen(), menu->isSoundEnabled());
+            state = map_editor->eventHandler(event, menu->isSoundEnabled());
             break;
 
         // game screen
         case PLAYING:
         if (game == NULL){
-            game = new Game(fs,App,vmode,menu->passLevels());
+            game = new Game(App,vmode,menu->passLevels());
         }
-        state = game->eventHandler(menu->isFullscreen(), menu->isSoundEnabled(),menu->getChosenLevel());
+        state = game->eventHandler(menu->isSoundEnabled(), menu->getChosenLevel());
         break;                
 
         // exit game
