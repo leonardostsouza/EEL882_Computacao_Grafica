@@ -18,17 +18,33 @@ public:
 	~Game();
 	
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
+
+	/*******************************************************
+	*  bool loadGame(std::string mapName);
+	*  Loads a previously saved game
+	*  string mapName - Filename to be loaded. Actually, there's only one save in the game.
+	********************************************************/
 	bool loadGame(std::string mapName);
 
 protected:
 	
-	void createBackground();
-	void createMusic();
+	void createBackground(); // creates a set of background images to animate the game background
+
+	/*******************************************************
+	*  bool createMusic();
+	*  Loads a set of sounds, music and sound effects. 
+	*  The background music is loaded into an exclusive buffer while the sounds effects swaps the buffer.
+	********************************************************/
+	void createMusic(); 
+
+	// SHALL BE REMOVED
 	bool isFullscreen();
 	void setFullscreen(bool fs);
-	void createGrid();
-	void loadTextures();
-	void loadMessages();
+
+
+	void createGrid(); // Create the grid so the player can orientate himself
+	void loadTextures(); //Load all the textures necessaries to the game
+	void loadMessages(); //Load the 
 
 	/*******************************************************
 	*  void playEffect(int sound, bool loop)
@@ -64,42 +80,58 @@ protected:
 	
 
 private:
+	//Control Variables
 	bool fullscreen;
 	bool enableDrawing;
-	int bgCounter = 0;
-	std::vector<std::string> levels;
-	sf::Text gametext;
-	int state;
 	bool left = true;
+	int state;
+	int moving;
 	int movecounter = 0;
+	int bgCounter = 0;
+
+	// Text-related variables
+	sf::Text message;
+	sf::Text gametext;
+	sf::Font font;
+	sf::Font messageFont;
+	sf::RectangleShape messageBox;
+	sf::Clock ClockSpeed;
+	
+	// Clock for Background (so it can change)
+	sf::Clock BgSpeed;
+	
+	// Window variables
 	sf::VideoMode vmode;
 	sf::RenderWindow* App;
 	sf::Sprite background;
-	sf::Font font;
-	sf::Font messageFont;
-	std::vector<sf::SoundBuffer> bsoundEffects = std::vector<sf::SoundBuffer>(5);
+
+	// Sound variables
 	sf::Sound soundEffects;
 	sf::SoundBuffer buffer;
 	sf::Sound bgMusic;		
-	std::vector<sf::Texture> bgTextures = std::vector<sf::Texture>(4);
-	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(MAX_OBSTACLES, sf::Vector2f({-1,-1}));
+	std::vector<sf::SoundBuffer> bsoundEffects = std::vector<sf::SoundBuffer>(5);
+
+	// Textures variables
 	sf::Texture obstacle;
+	std::vector<sf::Texture> bgTextures = std::vector<sf::Texture>(4);
 	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
+
+	// In-game objects variables
 	sf::Vector2f housePos;
+	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(MAX_OBSTACLES, sf::Vector2f({-1,-1}));
+
+	// Grid variables (grid is a joint of rectangles)
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 
-	sf::Clock ClockSpeed;
-	sf::Clock BgSpeed;
-	sf::Text message;
-	sf::RectangleShape messageBox;
+	// Levels availables
+	std::vector<std::string> levels;
 
 	enum TYPETEXT {IN_GAME,LOSE,WIN,SAVED};
 
 	enum SOUNDS {WATER_SPLASH, HIT_OBSTACLES, SKYING, VADER, YODA};
 
 	enum DIRECTION {STOPPED, UP, RIGHT, DOWN, LEFT};
-	int moving;
-
+	
 	Player* playerObj;
 };
 
