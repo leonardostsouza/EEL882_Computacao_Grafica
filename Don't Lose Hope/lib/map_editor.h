@@ -15,6 +15,7 @@ class MapEditor
 public:
 	MapEditor(bool fs = false, sf::RenderWindow* wd = NULL, sf::VideoMode vm = {0,0,0});
 	~MapEditor();
+
 	GAMESTATE eventHandler(sf::Event event,bool isFullscren, bool isSoundEnabled);
 
 protected:

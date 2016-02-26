@@ -23,7 +23,6 @@ Game::Game(bool fs, sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::str
 	state = IN_GAME;
 }
 
-
 Game::~Game()
 {
 }
@@ -330,7 +329,6 @@ GAMESTATE Game::eventHandler(bool isFullscreen, bool isSoundEnabled, int level)
 			App->draw(grid[i][j]);
 
 		if (playerObj->getDirection() == STOPPED){
-			//soundEffects.stop();
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && state == IN_GAME){
 				if (playerObj->getDirection() != UP){
 					playEffect(SKYING,true);

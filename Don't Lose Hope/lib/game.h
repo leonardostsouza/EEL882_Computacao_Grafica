@@ -19,10 +19,9 @@ public:
 	
 	GAMESTATE eventHandler(bool isFullscren, bool isSoundEnabled, int level);
 	bool loadGame(std::string mapName);
-	void setEnableDrawer(bool opt) { enableDrawing = opt; };
 
 protected:
-	void showText(int op);
+	
 	void createBackground();
 	void createMusic();
 	bool isFullscreen();
@@ -30,15 +29,39 @@ protected:
 	void createGrid();
 	void loadTextures();
 	void loadMessages();
-	void movePlayer();
+
+	/*******************************************************
+	*  void playEffect(int sound, bool loop)
+	*  plays selected sound effect
+	*  int sound - sound to be played. Accepted values are listed in enum SOUNDS
+	*  bool loop - 	false = sound is played only once
+	* 				true = sound played until a buffer::stop() is called
+	********************************************************/
 	void playEffect(int sound, bool loop = false);
-	void changeBG();
+
+	void changeBG(); // changes background image to create animates background
+
+	/*******************************************************
+	*  sf::Vector2i getGridPos(sf::Vector2i objPosition)
+	*  returns object grid position
+	*  sf::Vector2i objPosition - object screen position
+	********************************************************/
+	sf::Vector2f getGridPos(sf::Vector2f objPosition);
 	
+	/*******************************************************
+	*  void showMessage(std::string msg)
+	*  shows message on screen
+	*  std::string msg - message to be shown
+	********************************************************/
 	void showMessage(std::string str);
-	void retryGame();
-	bool mapParser(std::string mapFile);
-	bool saveGame();
-	sf::Vector2f getGridPos(sf::Vector2f objPosition); // return grid position from screen position
+
+	void showText(int op); // shows endgame text when player WINS or LOSES
+	void retryGame(); // restarts current level with initial values
+
+	bool mapParser(std::string mapFile); // parse map file and set variables accordingly
+	bool saveGame(); // save current game
+
+	
 
 private:
 	bool fullscreen;
@@ -60,12 +83,9 @@ private:
 	sf::Sound bgMusic;		
 	std::vector<sf::Texture> bgTextures = std::vector<sf::Texture>(4);
 	std::vector<sf::Vector2f> obstaclesPos = std::vector<sf::Vector2f>(MAX_OBSTACLES, sf::Vector2f({-1,-1}));
-//	std::vector<sf::Texture> obstacles = std::vector<sf::Texture>(5);
 	sf::Texture obstacle;
-	//std::vector<std::vector<sf::Texture>> player = std::vector<std::vector<sf::Texture>>(5,std::vector<sf::Texture>(4));
 	std::vector<sf::Texture> house = std::vector<sf::Texture>(2);
 	sf::Vector2f housePos;
-	//sf::RectangleShape playerShape;
 	std::vector<std::vector<sf::RectangleShape>> grid = std::vector<std::vector<sf::RectangleShape>>(6,std::vector<sf::RectangleShape>(7));
 
 	sf::Clock ClockSpeed;
