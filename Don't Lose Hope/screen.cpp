@@ -49,7 +49,7 @@ void Screen::changeMenuColor(int op, GAMESTATE localstate){
 			menu[4].setColor(sf::Color(0, 0, 0,100));
 		}
 		//NEXT
-		if (levels.size() < (page+1)*4){
+		if (levels.size() <= (page+1)*4){
 			menu[5].setColor(sf::Color(0, 0, 0,100));	
 		}
 	}
@@ -141,7 +141,7 @@ GAMESTATE Screen::eventHandler(GAMESTATE localstate) {
 						change = true;
 						clickEnable = false;
 						nextState = CHOOSING;
-						levelsloaded = false;
+						loadLevels();
 						#ifdef DEBUG	                  
 						std::cout << "DEBUG === GAMESTATE = \"CHOOSING\"" << std::endl;            
 	                    #endif

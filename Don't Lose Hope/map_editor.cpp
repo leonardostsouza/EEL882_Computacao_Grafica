@@ -189,6 +189,12 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isSoundEnabled)
 	App->clear();
 	App->draw(background);
 
+	for (int i = 0; i < grid.size(); i++) {
+		for (int j = 0; j < grid[i].size(); j++) {
+			App->draw(grid[i][j]);
+		}
+	}
+
 	App->draw(toolBox);
 	for (int i = 0; i<tools.size(); i++){
 		App->draw(tools[i]);
@@ -390,13 +396,6 @@ GAMESTATE MapEditor::eventHandler(sf::Event event, bool isSoundEnabled)
 		}
 		//mapWriter();
 		App->draw(message);
-	}
-
-
-	for (int i = 0; i < grid.size(); i++){
-		for (int j = 0; j < grid[i].size(); j++){
-			App->draw(grid[i][j]);
-		}
 	}
 
 	App->display();
