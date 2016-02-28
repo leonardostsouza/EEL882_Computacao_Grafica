@@ -6,6 +6,9 @@
 Game developed for the course EEL882 - Computação Gráfica (Graphic Computing) taken during the 2nd term of 2015.
 This game is multi-platform.
 
+It can be obtained through the link https://github.com/leonardostsouza/EEL882_Computacao_Grafica.git or via command on shell:
+git clone https://github.com/leonardostsouza/EEL882_Computacao_Grafica.git
+
 SETUP LINUX:
 	Enter on the folder and run a make*. Open the game through the launcher or via shell.
 
