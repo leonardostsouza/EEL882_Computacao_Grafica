@@ -1,3 +1,14 @@
+/********************************************************
+* UNIVERSIDADE FEDERAL DO RIO DE JANEIRO
+* COMPUTAÇÃO GRÁFICA (EEL882) - PROF. CLÁUDIO ESPERANÇA
+*
+* TRABALHO 3
+*
+* ALUNOS:
+* LEONARDO SOUZA - 112086681
+* RAPHAEL SATHLER - 111344078
+********************************************************/
+
 #include "lib/screen.h"
 
 Screen::Screen(sf::RenderWindow* wd, sf::VideoMode vm) : App (wd), vmode (vm) 

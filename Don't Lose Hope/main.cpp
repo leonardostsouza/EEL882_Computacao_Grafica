@@ -1,12 +1,19 @@
+/********************************************************
+* UNIVERSIDADE FEDERAL DO RIO DE JANEIRO
+* COMPUTAÇÃO GRÁFICA (EEL882) - PROF. CLÁUDIO ESPERANÇA
+*
+* TRABALHO 3
+*
+* ALUNOS:
+* LEONARDO SOUZA - 112086681
+* RAPHAEL SATHLER - 111344078
+********************************************************/
+
 #include "lib/screen.h"
 #include "lib/game.h"
 #include "lib/map_editor.h"
 #include "lib/utilities.h"
 #include <string.h>
-
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-
-//using namespace std;
 
 int main(int argc, char *argv[])
 {

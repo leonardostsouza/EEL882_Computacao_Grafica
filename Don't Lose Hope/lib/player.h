@@ -1,9 +1,16 @@
+/********************************************************
+* UNIVERSIDADE FEDERAL DO RIO DE JANEIRO
+* COMPUTAÇÃO GRÁFICA (EEL882) - PROF. CLÁUDIO ESPERANÇA
+*
+* TRABALHO 3
+*
+* ALUNOS:
+* LEONARDO SOUZA - 112086681
+* RAPHAEL SATHLER - 111344078
+********************************************************/
+
 #ifndef PLAYER_H
 #define PLAYER_H
-
-#ifndef PLAYER_MAX_LIFES
-#define PLAYER_MAX_LIFES 3
-#endif
 
 #ifndef MOVE_SPEED
 #define MOVE_SPEED 100.0

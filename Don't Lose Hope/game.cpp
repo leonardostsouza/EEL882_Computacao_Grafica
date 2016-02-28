@@ -1,3 +1,14 @@
+/********************************************************
+* UNIVERSIDADE FEDERAL DO RIO DE JANEIRO
+* COMPUTAÇÃO GRÁFICA (EEL882) - PROF. CLÁUDIO ESPERANÇA
+*
+* TRABALHO 3
+*
+* ALUNOS:
+* LEONARDO SOUZA - 112086681
+* RAPHAEL SATHLER - 111344078
+********************************************************/
+
 #include "lib/game.h"
 
 Game::Game(sf::RenderWindow* wd, sf::VideoMode vm, std::vector<std::string> maps) : App (wd), vmode (vm) , levels(maps)
@@ -308,7 +319,7 @@ GAMESTATE Game::eventHandler(bool isSoundEnabled, int level)
 	if (enableDrawing)
 	{
 		loadGame("resources/maps/" + levels[level]);
-		showMessage(" Press R: Retry or RCTRL+S: Save");
+		showMessage(" Press R: Retry or CTRL+S: Save");
 	}
 
 	GAMESTATE nextState = PLAYING;
